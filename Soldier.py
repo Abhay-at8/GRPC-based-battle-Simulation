@@ -8,7 +8,7 @@ class Soldier:
     self.soldierID =soldierid
 
   def __str__(self):
-    return f'id:{self.soldierID} x: {self.x_cord} y:{self.y_cord} speed{self.speed}'
+    return f'id:{self.soldierID} x: {self.x_cord} y:{self.y_cord} speed :{self.speed}'
   
   def in_redzone(self, missile):
     return (missile.left_bdry <= self.x_cord <= missile.right_bdry and \
@@ -78,5 +78,5 @@ class Missile:
     #print(self.right_bdry,self.left_bdry,self.top_bdry, self.bottom_bdry)
 
   def __str__(self):
-       return f' x: {self.x_cord} y:{self.y_cord} speed{self.rad}'
+       return f' x: {self.x_cord} y:{self.y_cord} radius :{self.rad}'
  

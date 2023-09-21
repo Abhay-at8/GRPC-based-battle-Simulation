@@ -5,12 +5,12 @@ service Game {
    rpc register (Soldier) returns (ServerOutput) {}
    rpc missile_approach (Empty) returns (stream Missile) {}
    rpc status(Request) returns (Empty){}
-   rpc broadcast(Request) returns (stream Response){}
-   rpc unary(Request) returns (Response){}
    rpc sendMissile(Empty) returns (Empty);
    rpc update_cordinates(Update) returns (Empty);
    rpc status_all(Empty) returns(Response);
-   rpc print(Empty) returns(Response);
+   rpc print_layout(Empty) returns(Response);
+   rpc initiaze(Empty) returns(InitialValues);
+   rpc game_status(Empty) returns(Response);
 }
 message Empty {}
 
@@ -19,7 +19,13 @@ message Soldier {
    int32  y = 2;
    int32 speed=3;
 }
+message InitialValues{
+   int32 sol_id=1;
+   int32 N=2;
+   int32 M=3;
+   int32 T=4;
 
+}
 message Update{
    bool alive=1;
    int32 x=2;

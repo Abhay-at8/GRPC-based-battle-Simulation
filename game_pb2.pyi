@@ -18,6 +18,18 @@ class Soldier(_message.Message):
     speed: int
     def __init__(self, x: _Optional[int] = ..., y: _Optional[int] = ..., speed: _Optional[int] = ...) -> None: ...
 
+class InitialValues(_message.Message):
+    __slots__ = ["sol_id", "N", "M", "T"]
+    SOL_ID_FIELD_NUMBER: _ClassVar[int]
+    N_FIELD_NUMBER: _ClassVar[int]
+    M_FIELD_NUMBER: _ClassVar[int]
+    T_FIELD_NUMBER: _ClassVar[int]
+    sol_id: int
+    N: int
+    M: int
+    T: int
+    def __init__(self, sol_id: _Optional[int] = ..., N: _Optional[int] = ..., M: _Optional[int] = ..., T: _Optional[int] = ...) -> None: ...
+
 class Update(_message.Message):
     __slots__ = ["alive", "x", "y", "message", "soldierID"]
     ALIVE_FIELD_NUMBER: _ClassVar[int]
