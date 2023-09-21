@@ -54,6 +54,11 @@ class GameStub(object):
                 request_serializer=game__pb2.Empty.SerializeToString,
                 response_deserializer=game__pb2.Response.FromString,
                 )
+        self.print = channel.unary_unary(
+                '/Game/print',
+                request_serializer=game__pb2.Empty.SerializeToString,
+                response_deserializer=game__pb2.Response.FromString,
+                )
 
 
 class GameServicer(object):
@@ -107,6 +112,12 @@ class GameServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def print(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_GameServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -147,6 +158,11 @@ def add_GameServicer_to_server(servicer, server):
             ),
             'status_all': grpc.unary_unary_rpc_method_handler(
                     servicer.status_all,
+                    request_deserializer=game__pb2.Empty.FromString,
+                    response_serializer=game__pb2.Response.SerializeToString,
+            ),
+            'print': grpc.unary_unary_rpc_method_handler(
+                    servicer.print,
                     request_deserializer=game__pb2.Empty.FromString,
                     response_serializer=game__pb2.Response.SerializeToString,
             ),
@@ -291,6 +307,23 @@ class Game(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Game/status_all',
+            game__pb2.Empty.SerializeToString,
+            game__pb2.Response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def print(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Game/print',
             game__pb2.Empty.SerializeToString,
             game__pb2.Response.FromString,
             options, channel_credentials,

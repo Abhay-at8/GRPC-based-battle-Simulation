@@ -51,6 +51,8 @@ def run():
           res=stub.sendMissile(game_pb2.Empty())
           t=t+1
           time.sleep(5)
+          res=stub.status_all(game_pb2.Empty())
+          print(res.message)
         print("out of loop")
         if(t==5):
           res=stub.unary(game_pb2.Request(message="game over"))
@@ -68,8 +70,13 @@ def run():
     # iterate over the responses and print them
       for res in response_iterator:
         #res = stub.missile_approach(game_pb2.Empty())
-        m=s1.Missile(res.x,res.y,res.rad)
-        obj.take_shelter(m,10)
+        if(obj.alive):
+          m=s1.Missile(res.x,res.y,res.rad)
+          msg=obj.take_shelter(m,10)
+          print(msg)
+          req=stub.update_cordinates(game_pb2.Update(alive=obj.alive,x=obj.x_cord,y=obj.y_cord,message=msg))
+        else:
+          break
 
 
    

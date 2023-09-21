@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\ngame.proto\"\x07\n\x05\x45mpty\".\n\x07Soldier\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x12\r\n\x05speed\x18\x03 \x01(\x05\">\n\x06Update\x12\r\n\x05\x61live\x18\x01 \x01(\t\x12\t\n\x01x\x18\x02 \x01(\x05\x12\t\n\x01y\x18\x03 \x01(\x05\x12\x0f\n\x07message\x18\x04 \x01(\t\",\n\x07Missile\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x12\x0b\n\x03rad\x18\x03 \x01(\x05\"\x1f\n\x0cServerOutput\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1a\n\x07Request\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1b\n\x08Response\x12\x0f\n\x07message\x18\x01 \x01(\t2\xa1\x02\n\x04Game\x12%\n\x08register\x12\x08.Soldier\x1a\r.ServerOutput\"\x00\x12(\n\x10missile_approach\x12\x06.Empty\x1a\x08.Missile\"\x00\x30\x01\x12\x1c\n\x06status\x12\x08.Request\x1a\x06.Empty\"\x00\x12$\n\tbroadcast\x12\x08.Request\x1a\t.Response\"\x00\x30\x01\x12\x1e\n\x05unary\x12\x08.Request\x1a\t.Response\"\x00\x12\x1d\n\x0bsendMissile\x12\x06.Empty\x1a\x06.Empty\x12$\n\x11update_cordinates\x12\x07.Update\x1a\x06.Empty\x12\x1f\n\nstatus_all\x12\x06.Empty\x1a\t.Responseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\ngame.proto\"\x07\n\x05\x45mpty\".\n\x07Soldier\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x12\r\n\x05speed\x18\x03 \x01(\x05\"Q\n\x06Update\x12\r\n\x05\x61live\x18\x01 \x01(\x08\x12\t\n\x01x\x18\x02 \x01(\x05\x12\t\n\x01y\x18\x03 \x01(\x05\x12\x0f\n\x07message\x18\x04 \x01(\t\x12\x11\n\tsoldierID\x18\x05 \x01(\x05\",\n\x07Missile\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x12\x0b\n\x03rad\x18\x03 \x01(\x05\"\x1f\n\x0cServerOutput\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1a\n\x07Request\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x1b\n\x08Response\x12\x0f\n\x07message\x18\x01 \x01(\t2\xbd\x02\n\x04Game\x12%\n\x08register\x12\x08.Soldier\x1a\r.ServerOutput\"\x00\x12(\n\x10missile_approach\x12\x06.Empty\x1a\x08.Missile\"\x00\x30\x01\x12\x1c\n\x06status\x12\x08.Request\x1a\x06.Empty\"\x00\x12$\n\tbroadcast\x12\x08.Request\x1a\t.Response\"\x00\x30\x01\x12\x1e\n\x05unary\x12\x08.Request\x1a\t.Response\"\x00\x12\x1d\n\x0bsendMissile\x12\x06.Empty\x1a\x06.Empty\x12$\n\x11update_cordinates\x12\x07.Update\x1a\x06.Empty\x12\x1f\n\nstatus_all\x12\x06.Empty\x1a\t.Response\x12\x1a\n\x05print\x12\x06.Empty\x1a\t.Responseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -26,15 +26,15 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_SOLDIER']._serialized_start=23
   _globals['_SOLDIER']._serialized_end=69
   _globals['_UPDATE']._serialized_start=71
-  _globals['_UPDATE']._serialized_end=133
-  _globals['_MISSILE']._serialized_start=135
-  _globals['_MISSILE']._serialized_end=179
-  _globals['_SERVEROUTPUT']._serialized_start=181
-  _globals['_SERVEROUTPUT']._serialized_end=212
-  _globals['_REQUEST']._serialized_start=214
-  _globals['_REQUEST']._serialized_end=240
-  _globals['_RESPONSE']._serialized_start=242
-  _globals['_RESPONSE']._serialized_end=269
-  _globals['_GAME']._serialized_start=272
-  _globals['_GAME']._serialized_end=561
+  _globals['_UPDATE']._serialized_end=152
+  _globals['_MISSILE']._serialized_start=154
+  _globals['_MISSILE']._serialized_end=198
+  _globals['_SERVEROUTPUT']._serialized_start=200
+  _globals['_SERVEROUTPUT']._serialized_end=231
+  _globals['_REQUEST']._serialized_start=233
+  _globals['_REQUEST']._serialized_end=259
+  _globals['_RESPONSE']._serialized_start=261
+  _globals['_RESPONSE']._serialized_end=288
+  _globals['_GAME']._serialized_start=291
+  _globals['_GAME']._serialized_end=608
 # @@protoc_insertion_point(module_scope)

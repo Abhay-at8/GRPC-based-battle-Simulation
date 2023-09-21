@@ -12,11 +12,39 @@ class Game(game_pb2_grpc.GameServicer):
         self.clients = []
         self.missiles=[]
         self.game_over=False
-        self.t=1
+        self.t=0
 
 
     soldierId=0
     soldiers=[]
+
+    def status_all(self, request, context):
+        msg="\n"
+        for soldier in self.soldiers:
+            #print(f"before: {soldier}\n")
+            msg+=f"soldier Id : {soldier.soldierID}"
+            
+            if soldier.alive:
+                msg+=", status : alive\n"
+            else:
+                msg+=", status : dead\n"
+            #     self.soldiers.remove(soldier)
+        return  game_pb2.Response(message=msg)
+
+    def update_cordinates(self, request, context):
+        #print(f"\nupdates recieved {request}\n")
+        print(request.message)
+        for soldier in self.soldiers:
+            #print(f"before: {soldier}\n")
+            if soldier.soldierID==request.soldierID:
+                if request.alive==True:
+                    soldier.x_cord=request.x
+                    soldier.y_cord=request.x
+                else:
+                    soldier.alive=False
+            #print(f"after: {soldier}\n\n")
+
+        return game_pb2.Empty()
 
 
     def register(self, request, context):
@@ -42,6 +70,7 @@ class Game(game_pb2_grpc.GameServicer):
         s=random.randint(1,4)
         m=s1.Missile(x_cord=x,y_cord=y,rad=s)
         self.missiles.append(m)
+        print(f"Incoming missile {self.t}: {m}\n")
         self.t+=1
         if(self.t==4):
             time.sleep(5)
@@ -56,7 +85,7 @@ class Game(game_pb2_grpc.GameServicer):
         return game_pb2.Response(message="game over")
 
     def missile_approach(self, request, context):
-        print(f"attacking with misile\n")
+        #print(f"attacking with misile\n")
         attack =0
         while( not self.game_over):
             while len(self.missiles) > attack:
@@ -64,8 +93,8 @@ class Game(game_pb2_grpc.GameServicer):
                 #print(f"attacking with misile {attack} : {m}")
                 attack += 1
                 yield game_pb2.Missile(x=m.x_cord,y=m.y_cord,rad=m.rad)
-        print(f"missile attack over")
-        
+        #print(f"missile attack over")
+
 
         
 

@@ -19,27 +19,28 @@ class Soldier:
     if self.in_redzone(missile):
       
       if missile.right_bdry < (self.x_cord + self.speed) < N:
-        print(f'Soldier {self.soldierID} moved right by {self.speed} from ({self.x_cord},{self.y_cord}) to ')
+        str=f'Soldier {self.soldierID} moved right by {self.speed} from ({self.x_cord},{self.y_cord}) to '
         self.x_cord = self.x_cord + self.speed
-        print(f'({self.x_cord},{self.y_cord})\n')
+        str+=f'({self.x_cord},{self.y_cord})\n'
         
       elif 0 < (self.x_cord - self.speed) < missile.left_bdry:
-        print(f'Soldier {self.soldierID} moved left by {self.speed} from ({self.x_cord},{self.y_cord}) to ')
+        str=f'Soldier {self.soldierID} moved left by {self.speed} from ({self.x_cord},{self.y_cord}) to '
         self.x_cord = self.x_cord - self.speed
-        print(f'({self.x_cord},{self.y_cord})\n')
+        str+=f'({self.x_cord},{self.y_cord})\n'
       elif 0 < self.y_cord - self.speed <= missile.top_bdry:
-        print(f'Soldier {self.soldierID} moved backwards by {self.speed} from ({self.x_cord},{self.y_cord}) to ')
+        str=f'Soldier {self.soldierID} moved backwards by {self.speed} from ({self.x_cord},{self.y_cord}) to '
         self.y_cord = self.y_cord - self.speed
-        print(f'({self.x_cord},{self.y_cord})\n')
+        str+=f'({self.x_cord},{self.y_cord})\n'
       elif missile.bottom_bdry < self.y_cord + self.speed < N:
-        print(f'Soldier {self.soldierID} moved forward by {self.speed} from ({self.x_cord},{self.y_cord}) to ')
+        str=f'Soldier {self.soldierID} moved forward by {self.speed} from ({self.x_cord},{self.y_cord}) to '
         self.y_cord = self.y_cord + self.speed
-        print(f'({self.x_cord},{self.y_cord})\n')
+        str+=f'({self.x_cord},{self.y_cord})\n'
       else:
-        print(f'Soldier {self.soldierID} died \n')
+        str=f'Soldier {self.soldierID} died \n'
         self.alive = False
     else:
-      print(f'Soldier {self.soldierID} out of red zone \n')
+      str=f'Soldier {self.soldierID} out of red zone \n'
+    return str
 
 
 def was_hit(soldierID, trueFlag):

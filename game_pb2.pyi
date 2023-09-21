@@ -19,16 +19,18 @@ class Soldier(_message.Message):
     def __init__(self, x: _Optional[int] = ..., y: _Optional[int] = ..., speed: _Optional[int] = ...) -> None: ...
 
 class Update(_message.Message):
-    __slots__ = ["alive", "x", "y", "message"]
+    __slots__ = ["alive", "x", "y", "message", "soldierID"]
     ALIVE_FIELD_NUMBER: _ClassVar[int]
     X_FIELD_NUMBER: _ClassVar[int]
     Y_FIELD_NUMBER: _ClassVar[int]
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
-    alive: str
+    SOLDIERID_FIELD_NUMBER: _ClassVar[int]
+    alive: bool
     x: int
     y: int
     message: str
-    def __init__(self, alive: _Optional[str] = ..., x: _Optional[int] = ..., y: _Optional[int] = ..., message: _Optional[str] = ...) -> None: ...
+    soldierID: int
+    def __init__(self, alive: bool = ..., x: _Optional[int] = ..., y: _Optional[int] = ..., message: _Optional[str] = ..., soldierID: _Optional[int] = ...) -> None: ...
 
 class Missile(_message.Message):
     __slots__ = ["x", "y", "rad"]
