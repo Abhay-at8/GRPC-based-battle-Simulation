@@ -44,6 +44,16 @@ class GameStub(object):
                 request_serializer=game__pb2.Empty.SerializeToString,
                 response_deserializer=game__pb2.Empty.FromString,
                 )
+        self.update_cordinates = channel.unary_unary(
+                '/Game/update_cordinates',
+                request_serializer=game__pb2.Update.SerializeToString,
+                response_deserializer=game__pb2.Empty.FromString,
+                )
+        self.status_all = channel.unary_unary(
+                '/Game/status_all',
+                request_serializer=game__pb2.Empty.SerializeToString,
+                response_deserializer=game__pb2.Response.FromString,
+                )
 
 
 class GameServicer(object):
@@ -85,6 +95,18 @@ class GameServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def update_cordinates(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def status_all(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_GameServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -117,6 +139,16 @@ def add_GameServicer_to_server(servicer, server):
                     servicer.sendMissile,
                     request_deserializer=game__pb2.Empty.FromString,
                     response_serializer=game__pb2.Empty.SerializeToString,
+            ),
+            'update_cordinates': grpc.unary_unary_rpc_method_handler(
+                    servicer.update_cordinates,
+                    request_deserializer=game__pb2.Update.FromString,
+                    response_serializer=game__pb2.Empty.SerializeToString,
+            ),
+            'status_all': grpc.unary_unary_rpc_method_handler(
+                    servicer.status_all,
+                    request_deserializer=game__pb2.Empty.FromString,
+                    response_serializer=game__pb2.Response.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -227,5 +259,39 @@ class Game(object):
         return grpc.experimental.unary_unary(request, target, '/Game/sendMissile',
             game__pb2.Empty.SerializeToString,
             game__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def update_cordinates(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Game/update_cordinates',
+            game__pb2.Update.SerializeToString,
+            game__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def status_all(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Game/status_all',
+            game__pb2.Empty.SerializeToString,
+            game__pb2.Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

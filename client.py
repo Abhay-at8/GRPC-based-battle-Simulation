@@ -33,7 +33,7 @@ def run():
     s=random.randint(1,4)
     response = stub.register(game_pb2.Soldier(x=x, y=y,speed=s))
     
-    
+    is_commander=False
     cs=False
     # create a request with a message
     obj=s1.Soldier(x,y,s,int(response.message))
@@ -41,37 +41,38 @@ def run():
     t=0
     #p = multiprocessing.Process(target=child)
     #p.start()
-    
-    if obj.soldierID==1 and cs==False:
-      cs=True
-      while t<7:
-        print(f"sending missile {t} warning from commander\n\n")
-        res=stub.sendMissile(game_pb2.Empty())
-        t=t+1
-        time.sleep(5)
-      print("out of loop")
-      if(t==6):
-         res=stub.unary(game_pb2.Request(message="game over"))
+    try:
+
+      if obj.soldierID==1 and cs==False:
+        cs=True
+        is_commander=True
+        while t<4:
+          print(f"sending missile {t} warning from commander\n\n")
+          res=stub.sendMissile(game_pb2.Empty())
+          t=t+1
+          time.sleep(5)
+        print("out of loop")
+        if(t==5):
+          res=stub.unary(game_pb2.Request(message="game over"))
+        time.sleep(10)
+        #res=stub.unary(game_pb2.Request(message="print"))
+    except Exception as e:
+      print(e)
     
     
     response_iterator = stub.missile_approach(game_pb2.Empty())
-    cs==False
+    #cs==False
 
     #p.join()
-    if(True):
+    if(not is_commander):
     # iterate over the responses and print them
       for res in response_iterator:
         #res = stub.missile_approach(game_pb2.Empty())
         m=s1.Missile(res.x,res.y,res.rad)
         obj.take_shelter(m,10)
-      #time.sleep(5)
-    
-    # while obj.alive:
-    #   res = stub.missile_approach(game_pb2.Empty())
-    #   m=s1.Missile(res.x,res.y,res.rad)
-    #   obj.take_shelter(m,10)
-    #   time.sleep(5)
+
 
    
-   
+
 run()
+

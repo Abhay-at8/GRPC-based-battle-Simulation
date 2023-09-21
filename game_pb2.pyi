@@ -18,6 +18,18 @@ class Soldier(_message.Message):
     speed: int
     def __init__(self, x: _Optional[int] = ..., y: _Optional[int] = ..., speed: _Optional[int] = ...) -> None: ...
 
+class Update(_message.Message):
+    __slots__ = ["alive", "x", "y", "message"]
+    ALIVE_FIELD_NUMBER: _ClassVar[int]
+    X_FIELD_NUMBER: _ClassVar[int]
+    Y_FIELD_NUMBER: _ClassVar[int]
+    MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    alive: str
+    x: int
+    y: int
+    message: str
+    def __init__(self, alive: _Optional[str] = ..., x: _Optional[int] = ..., y: _Optional[int] = ..., message: _Optional[str] = ...) -> None: ...
+
 class Missile(_message.Message):
     __slots__ = ["x", "y", "rad"]
     X_FIELD_NUMBER: _ClassVar[int]

@@ -8,6 +8,8 @@ service Game {
    rpc broadcast(Request) returns (stream Response){}
    rpc unary(Request) returns (Response){}
    rpc sendMissile(Empty) returns (Empty);
+   rpc update_cordinates(Update) returns (Empty);
+   rpc status_all(Empty) returns(Response);
 }
 message Empty {}
 
@@ -15,6 +17,13 @@ message Soldier {
    int32  x = 1;
    int32  y = 2;
    int32 speed=3;
+}
+
+message Update{
+   string alive=1;
+   int32 x=2;
+   int32 y=3;
+   string message=4;
 }
 
 message Missile {
