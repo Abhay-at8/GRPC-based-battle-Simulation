@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+service Game {
+
+   rpc register (Soldier) returns (ServerOutput) {}
+   rpc missile_approach (Empty) returns (stream Missile) {}
+   rpc status(Request) returns (Empty){}
+   rpc broadcast(Request) returns (stream Response){}
+   rpc unary(Request) returns (Response){}
+   rpc sendMissile(Empty) returns (Empty);
+}
+message Empty {}
+
+message Soldier {
+   int32  x = 1;
+   int32  y = 2;
+   int32 speed=3;
+}
+
+message Missile {
+   int32  x = 1;
+   int32  y = 2;
+   int32 rad=3;
+}
+message ServerOutput {
+   string message = 1;
+}
+
+message Request {
+  string message = 1;
+}
+
+message Response {
+  string message = 1;
+}
+
