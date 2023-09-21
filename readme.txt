@@ -9,4 +9,4 @@ Step 4: start the server and pass necessary paramenter
         For eg python server.py 10 3 4
 Step 4: Run the clients using bat file using command .\client_run.bat
 
-Note : modify the no of client in batch file based on no of soldier and no of systems used
+Note : modify the no of client in batch file based on no of soldiers and no of systems used
