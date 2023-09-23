@@ -62,10 +62,11 @@ class Missile:
         self.rad = rad
 
         # missile impact radius boundaries
-        self.left_bdry = self.x_cord - self.rad
-        self.right_bdry = self.x_cord + self.rad
-        self.top_bdry = self.y_cord - self.rad
-        self.bottom_bdry = self.y_cord + self.rad
+        self.left_bdry = self.y_cord - self.rad
+        self.right_bdry = self.y_cord + self.rad
+        self.top_bdry = self.x_cord - self.rad
+        self.bottom_bdry = self.x_cord + self.rad
+
         # out of field condn
         '''if(self.bottom_bdry>N or self.right_bdry>N):
       self.right_bdry=self.bottom_bdry=N

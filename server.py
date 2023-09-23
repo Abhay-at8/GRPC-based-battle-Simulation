@@ -32,9 +32,9 @@ class Game(game_pb2_grpc.GameServicer):
     def game_status(self, request, context):
 
         if len(self.soldiers) >= 0.5 * self.M:
-            msg = f"{len(self.soldiers)} out of {self.M} are alive.Game is Won!!!!"
+            msg = f"{len(self.soldiers)} out of {self.M} are alive. Game is won !!!!"
         else:
-            msg = f"only {len(self.soldiers)} out of {self.M} are alive. game is lost :("
+            msg = f"{len(self.soldiers)} out of {self.M} are alive. Game is lost :("
 
         print(msg)
         return game_pb2.Response(message=msg)
@@ -92,8 +92,8 @@ class Game(game_pb2_grpc.GameServicer):
                 break
 
         time.sleep(5)
-        x = random.randint(0, self.N)
-        y = random.randint(0, self.N)
+        x = random.randint(0, self.N-1)
+        y = random.randint(0, self.N-1)
         s = random.randint(1, 4)
         m = s1.Missile(x_cord=x, y_cord=y, rad=s)
         self.missiles.append(m)
@@ -116,7 +116,6 @@ class Game(game_pb2_grpc.GameServicer):
         # print(f"missile attack over")
 
     def print_layout(self, request, context):
-        print('inside print_layout')
         N = self.N
         missile = self.missiles[self.t - 1]
         print(f"Firing missile {self.t} {missile} \n")
@@ -128,7 +127,7 @@ class Game(game_pb2_grpc.GameServicer):
             # appending a tuple of the soldier coordinates to the list
             soldierSet.append((soldier.x_cord, soldier.y_cord))
 
-        print(soldierSet)
+        print(f"Soldiers at: {soldierSet}")
 
         obj_map = [(soldier.soldierID, soldier.x_cord, soldier.y_cord) for soldier in self.soldiers]
 
@@ -148,8 +147,8 @@ class Game(game_pb2_grpc.GameServicer):
                         mat[i][j] = '#'
 
         # mark missile coordinate on the matrix
-        print(missile)
-        # mat[missile.x][missile.y] = 'X'
+        print(f"Missile {missile}")
+        mat[missile.x_cord][missile.y_cord] = 'X'
 
         # print(mat)
         # print the matrix row by row

@@ -23,8 +23,8 @@ def run():
     M = res.M
     T = res.T
 
-    x = random.randint(0, 10)
-    y = random.randint(0, 10)
+    x = random.randint(0, N-1)
+    y = random.randint(0, N-1)
     s = random.randint(1, 4)
     response = stub.register(game_pb2.Soldier(x=x, y=y, speed=s))
 
