@@ -11,7 +11,7 @@ service Game {
    rpc print_layout(Empty) returns(Response);
    rpc initiaze(Empty) returns(InitialValues);
    rpc game_status(Empty) returns(Response);
-   //rpc is_commander_alive(Empty) returns(Response);
+   rpc is_commander_alive(Empty) returns(CommanderId);
 }
 message Empty {}
 
@@ -50,5 +50,9 @@ message Request {
 
 message Response {
   string message = 1;
+}
+
+message CommanderId {
+   int32 commanderId = 1;
 }
 

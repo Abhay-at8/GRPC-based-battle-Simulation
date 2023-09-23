@@ -9,6 +9,12 @@ import sys
 
 
 class Game(game_pb2_grpc.GameServicer):
+    soldierId = 0
+    soldiers = []
+    commander_alive = True
+
+
+
     def __init__(self):
         # a list to store the connected clients
         self.clients = []
@@ -25,9 +31,6 @@ class Game(game_pb2_grpc.GameServicer):
             print("Fatal: You forgot to include the matrix size,no of soldiers, time/no of iteration.")
             print("Usage: python server.py arg1 arg2 arg3 -> Refer to readme.txt")
             sys.exit(1)
-
-    soldierId = 0
-    soldiers = []
 
     def game_status(self, request, context):
 
@@ -67,6 +70,8 @@ class Game(game_pb2_grpc.GameServicer):
                     soldier.y_cord = request.y
                 else:
                     soldier.alive = False
+                    if soldier.soldierID==self.commanderId:
+                        self.commander_alive=False
             # print(f"after: {soldier}\n\n")
 
         return game_pb2.Empty()
@@ -92,8 +97,8 @@ class Game(game_pb2_grpc.GameServicer):
                 break
 
         time.sleep(5)
-        x = random.randint(0, self.N-1)
-        y = random.randint(0, self.N-1)
+        x = random.randint(0, self.N - 1)
+        y = random.randint(0, self.N - 1)
         s = random.randint(1, 4)
         m = s1.Missile(x_cord=x, y_cord=y, rad=s)
         self.missiles.append(m)
@@ -120,14 +125,14 @@ class Game(game_pb2_grpc.GameServicer):
         missile = self.missiles[self.t - 1]
         print(f"Firing missile {self.t} {missile} \n")
 
-        # list for storing soldiers
+        # list for printing soldiers
         soldierSet = []
 
         for soldier in self.soldiers:
             # appending a tuple of the soldier coordinates to the list
             soldierSet.append((soldier.x_cord, soldier.y_cord))
 
-        print(f"Soldiers at: {soldierSet}")
+        print(f"Soldiers: {soldierSet}")
 
         obj_map = [(soldier.soldierID, soldier.x_cord, soldier.y_cord) for soldier in self.soldiers]
 
@@ -148,7 +153,7 @@ class Game(game_pb2_grpc.GameServicer):
 
         # mark missile coordinate on the matrix
         print(f"Missile {missile}")
-        mat[missile.x_cord][missile.y_cord] = 'X'
+        mat[missile.y_cord][missile.x_cord] = 'X'
 
         # print(mat)
         # print the matrix row by row
@@ -161,6 +166,16 @@ class Game(game_pb2_grpc.GameServicer):
         print('\n\n')
 
         return game_pb2.Request(message=msg)
+
+    def is_commander_alive(self, request, context):
+        if not self.commander_alive:
+            index = random.randint(0, len(self.soldiers)-1)
+            while not self.soldiers[index].alive:
+                index = random.randint(0, len(self.soldiers) - 1)
+            self.commanderId=self.soldiers[index].soldierID
+            self.commander_alive=True
+        return game_pb2.CommanderId(commanderId=self.commanderId)
+
 
 
 def server():

@@ -71,9 +71,3 @@ class Response(_message.Message):
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
     message: str
     def __init__(self, message: _Optional[str] = ...) -> None: ...
-
-class CommanderId(_message.Message):
-    __slots__ = ["commanderId"]
-    COMMANDERID_FIELD_NUMBER: _ClassVar[int]
-    commanderId: int
-    def __init__(self, commanderId: _Optional[int] = ...) -> None: ...
