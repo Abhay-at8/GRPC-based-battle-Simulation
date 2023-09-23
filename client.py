@@ -33,6 +33,7 @@ def run():
     # create a request with a message
     obj = s1.Soldier(x, y, s, int(response.message))
     print(obj)
+    
 
     commander_thread = Thread(target=commander_activities, args=[obj, stub, T, commander_id])
     soldier_thread = Thread(target=soldier_action, args=[obj, stub, T, commander_id, N])
@@ -46,14 +47,14 @@ def run():
 
 def commander_activities(obj, stub, T, commander_id):
     try:
-        global t
-        print("Soldier is {}".format(commander_id))
+        global t 
+        print("Commnader is {}".format(commander_id))
         if obj.soldierID == commander_id and obj.alive:
-            while t < T:
+            while t < T  and commander_id==obj.soldierID:
                 print(f"sending missile {t} warning from commander\n\n")
                 res = stub.sendMissile(game_pb2.Empty())
                 t = t + 1
-                time.sleep(5)
+                time.sleep(10)
                 res = stub.status_all(game_pb2.Empty())
                 print(res.message)
                 time.sleep(5)
@@ -62,9 +63,10 @@ def commander_activities(obj, stub, T, commander_id):
                 print('\n')
                 print("--------------------------------------")
             print("Game ends here")
-            res = stub.game_status(game_pb2.Empty())
-            print(res.message)
-
+            if t==T:
+                res = stub.game_status(game_pb2.Empty())
+                print(res.message)
+            
             time.sleep(10)
 
     except Exception as e:
@@ -73,7 +75,7 @@ def commander_activities(obj, stub, T, commander_id):
 
 def soldier_action(obj, stub, T, commander_id, N):
     response_iterator = stub.missile_approach(game_pb2.Empty())
-
+    all_dead=False
     # iterate over the responses and print them
     for res in response_iterator:
         # res = stub.missile_approach(game_pb2.Empty())
@@ -85,11 +87,15 @@ def soldier_action(obj, stub, T, commander_id, N):
                 game_pb2.Update(alive=obj.alive, x=obj.x_cord, y=obj.y_cord, message=msg,
                                 soldierID=obj.soldierID))
 
-            # res = stub.is_commander_alive(
-            #     game_pb2.Empty())  # return the commanderId of current commander if alive else of
-            # # checking if old commander is dead and if the current soldier is the new commander
-            # if commander_id != res.commanderId and obj.soldierID == res.commanderId:
-            #     commander_id = res.commanderId
+            res = stub.is_commander_alive(
+                    game_pb2.Empty())  # return the commanderId of current commander if alive else of
+                # checking if old commander is dead and if the current soldier is the new commander
+            if commander_id != res.commanderId and obj.soldierID == res.commanderId:
+                commander_id = res.commanderId
+                t=res.time
+                var=res.all_dead
+                print("I am new Commander")
+                break
             #     print(f"Commander is dead with soldierId {commander_id}")
             #     print(f"Solider {obj.soldierID} is now the new commander.")
             #     # starting a new thread for the commander activities
@@ -99,6 +105,8 @@ def soldier_action(obj, stub, T, commander_id, N):
 
         else:
             break
+    print("out of Stream")
+        
 
 
 

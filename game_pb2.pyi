@@ -72,8 +72,12 @@ class Response(_message.Message):
     message: str
     def __init__(self, message: _Optional[str] = ...) -> None: ...
 
-class CommanderId(_message.Message):
-    __slots__ = ["commanderId"]
+class Commander_alive_response(_message.Message):
+    __slots__ = ["commanderId", "time", "all_dead"]
     COMMANDERID_FIELD_NUMBER: _ClassVar[int]
+    TIME_FIELD_NUMBER: _ClassVar[int]
+    ALL_DEAD_FIELD_NUMBER: _ClassVar[int]
     commanderId: int
-    def __init__(self, commanderId: _Optional[int] = ...) -> None: ...
+    time: int
+    all_dead: bool
+    def __init__(self, commanderId: _Optional[int] = ..., time: _Optional[int] = ..., all_dead: bool = ...) -> None: ...
