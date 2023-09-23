@@ -8,11 +8,6 @@ import time, os
 import multiprocessing
 from threading import Thread
 
-
-def child():
-    print("In the child process that has the PID {}".format(os.getpid()))
-
-
 def run():
     N = 10
     M = 3
@@ -22,6 +17,8 @@ def run():
     # create a stub for the service
     stub = game_pb2_grpc.GameStub(channel)
     res = stub.initiaze(game_pb2.Empty())
+
+    commander_id = res.sol_id
     N = res.N
     M = res.M
     T = res.T
@@ -40,7 +37,7 @@ def run():
     # commander_activities(obj, stub, is_commander, cs, T)
     # soldier_action(obj, stub, is_commander, N)
 
-    commander_thread = Thread(target=commander_activities, args=[obj, stub, is_commander, cs, T])
+    commander_thread = Thread(target=commander_activities, args=[obj, stub, T, commander_id])
     soldier_thread = Thread(target=soldier_action, args=[obj, stub, is_commander, N])
 
     commander_thread.start()
@@ -50,12 +47,11 @@ def run():
     soldier_thread.join()
 
 
-def commander_activities(obj, stub, is_commander, cs, T):
+def commander_activities(obj, stub, T, commander_id):
     try:
         t = 0
-        if obj.soldierID == 1 and cs == False:
-            cs = True
-            is_commander = True
+        print("Soldier is {}".format(commander_id))
+        if obj.soldierID == commander_id:
             while t < T:
                 print(f"sending missile {t} warning from commander\n\n")
                 res = stub.sendMissile(game_pb2.Empty())
@@ -82,19 +78,20 @@ def soldier_action(obj, stub, is_commander, N):
     # cs==False
 
     # p.join()
-    if not is_commander:
-        # iterate over the responses and print them
-        for res in response_iterator:
-            # res = stub.missile_approach(game_pb2.Empty())
-            if obj.alive:
-                m = s1.Missile(res.x, res.y, res.rad)
-                msg = obj.take_shelter(m, N)
-                print(msg)
-                req = stub.update_cordinates(
-                    game_pb2.Update(alive=obj.alive, x=obj.x_cord, y=obj.y_cord, message=msg,
-                                    soldierID=obj.soldierID))
-            else:
-                break
+    #if not is_commander:
+    # iterate over the responses and print them
+    for res in response_iterator:
+        # res = stub.missile_approach(game_pb2.Empty())
+        if obj.alive:
+            m = s1.Missile(res.x, res.y, res.rad)
+            msg = obj.take_shelter(m, N)
+            print(msg)
+            req = stub.update_cordinates(
+                game_pb2.Update(alive=obj.alive, x=obj.x_cord, y=obj.y_cord, message=msg,
+                                soldierID=obj.soldierID))
+
+        else:
+            break
 
 
 run()

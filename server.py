@@ -19,7 +19,8 @@ class Game(game_pb2_grpc.GameServicer):
         try:
             self.N = int(sys.argv[1])  # Battlefield Matrix size
             self.M = int(sys.argv[2])  # No of soldiers along with commander
-            self.T = int(sys.argv[3])  # Time
+            self.commanderId = random.randint(1, self.M)
+            self.T = int(sys.argv[3])  # Time or no of missiles firings
         except:
             print("Fatal: You forgot to include the matrix size,no of soldiers, time/no of iteration.")
             print("Usage: python server.py arg1 arg2 arg3 -> Refer to readme.txt")
@@ -39,7 +40,7 @@ class Game(game_pb2_grpc.GameServicer):
         return game_pb2.Response(message=msg)
 
     def initiaze(self, request, context):
-        return game_pb2.InitialValues(sol_id=1, N=self.N, M=self.M, T=self.T)
+        return game_pb2.InitialValues(sol_id=self.commanderId, N=self.N, M=self.M, T=self.T)
 
     def status_all(self, request, context):
         msg = "\n"
@@ -63,7 +64,7 @@ class Game(game_pb2_grpc.GameServicer):
             if soldier.soldierID == request.soldierID:
                 if request.alive:
                     soldier.x_cord = request.x
-                    soldier.y_cord = request.x
+                    soldier.y_cord = request.y
                 else:
                     soldier.alive = False
             # print(f"after: {soldier}\n\n")
@@ -115,18 +116,28 @@ class Game(game_pb2_grpc.GameServicer):
         # print(f"missile attack over")
 
     def print_layout(self, request, context):
+        print('inside print_layout')
         N = self.N
         missile = self.missiles[self.t - 1]
-        print(f"at iteration {self.t - 1} missile: {missile} \n")
-        soldierSet = {(soldier.x_cord, soldier.y_cord) for soldier in self.soldiers}
-        print(soldierSet)
-        obj_map = {}
-        for soldier in self.soldiers:
-            obj_map[(soldier.x_cord, soldier.y_cord)] = soldier.soldierID
+        print(f"Firing missile {self.t} {missile} \n")
 
-        # create the matrix using list comprehension
-        mat = [[obj_map[(x, y)] if (x, y) in soldierSet else '.' for x in range(N)]
-               for y in range(N)]
+        # list for storing soldiers
+        soldierSet = []
+
+        for soldier in self.soldiers:
+            # appending a tuple of the soldier coordinates to the list
+            soldierSet.append((soldier.x_cord, soldier.y_cord))
+
+        print(soldierSet)
+
+        obj_map = [(soldier.soldierID, soldier.x_cord, soldier.y_cord) for soldier in self.soldiers]
+
+        mat = [['.' for x in range(N)] for y in range(N)]
+
+        for soldierID, x, y in obj_map:
+            # assigning the soldier ID to the matrix cell
+            mat[y][x] = soldierID
+
         for i in range(N):
             for j in range(N):
                 if i == missile.top_bdry or i == missile.bottom_bdry:
@@ -136,10 +147,9 @@ class Game(game_pb2_grpc.GameServicer):
                     if (missile.bottom_bdry >= i >= missile.top_bdry) and mat[i][j] == '.':
                         mat[i][j] = '#'
 
-
         # mark missile coordinate on the matrix
         print(missile)
-        #mat[missile.x][missile.y] = 'X'
+        # mat[missile.x][missile.y] = 'X'
 
         # print(mat)
         # print the matrix row by row

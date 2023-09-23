@@ -19,28 +19,27 @@ class Soldier:
         if self.in_redzone(missile):
 
             if missile.right_bdry < (self.x_cord + self.speed) < N:
-                str = f'Soldier {self.soldierID} moved right by {self.speed} from ({self.x_cord},{self.y_cord}) to '
+                soldier_movement = f'Soldier {self.soldierID} moved right by {self.speed} from ({self.x_cord},{self.y_cord}) to '
                 self.x_cord = self.x_cord + self.speed
-                str += f'({self.x_cord},{self.y_cord})\n'
-
+                soldier_movement += f'({self.x_cord},{self.y_cord})\n'
             elif 0 < (self.x_cord - self.speed) < missile.left_bdry:
-                str = f'Soldier {self.soldierID} moved left by {self.speed} from ({self.x_cord},{self.y_cord}) to '
+                soldier_movement = f'Soldier {self.soldierID} moved left by {self.speed} from ({self.x_cord},{self.y_cord}) to '
                 self.x_cord = self.x_cord - self.speed
-                str += f'({self.x_cord},{self.y_cord})\n'
+                soldier_movement += f'({self.x_cord},{self.y_cord})\n'
             elif 0 < self.y_cord - self.speed < missile.top_bdry:
-                str = f'Soldier {self.soldierID} moved backwards by {self.speed} from ({self.x_cord},{self.y_cord}) to '
+                soldier_movement = f'Soldier {self.soldierID} moved backwards by {self.speed} from ({self.x_cord},{self.y_cord}) to '
                 self.y_cord = self.y_cord - self.speed
-                str += f'({self.x_cord},{self.y_cord})\n'
+                soldier_movement += f'({self.x_cord},{self.y_cord})\n'
             elif missile.bottom_bdry < self.y_cord + self.speed < N:
-                str = f'Soldier {self.soldierID} moved forward by {self.speed} from ({self.x_cord},{self.y_cord}) to '
+                soldier_movement = f'Soldier {self.soldierID} moved forward by {self.speed} from ({self.x_cord},{self.y_cord}) to '
                 self.y_cord = self.y_cord + self.speed
-                str += f'({self.x_cord},{self.y_cord})\n'
+                soldier_movement += f'({self.x_cord},{self.y_cord})\n'
             else:
-                str = f'Soldier {self.soldierID} died \n'
+                soldier_movement = f'Soldier {self.soldierID} died \n'
                 self.alive = False
         else:
-            str = f'Soldier {self.soldierID} out of red zone \n'
-        return str
+            soldier_movement = f'Soldier {self.soldierID} out of red zone \n'
+        return soldier_movement
 
 
 def was_hit(soldierID, trueFlag):
@@ -76,4 +75,5 @@ class Missile:
         # print(self.right_bdry,self.left_bdry,self.top_bdry, self.bottom_bdry)
 
     def __str__(self):
-        return f' x: {self.x_cord} y:{self.y_cord} radius :{self.rad}'
+        return f'at ({self.x_cord},{self.y_cord}) of radius {self.rad}'
+        #return f' x:{self.x_cord} y:{self.y_cord} radius :{self.rad}'

@@ -11,6 +11,7 @@ service Game {
    rpc print_layout(Empty) returns(Response);
    rpc initiaze(Empty) returns(InitialValues);
    rpc game_status(Empty) returns(Response);
+   //rpc is_commander_alive(Empty) returns(Response);
 }
 message Empty {}
 
