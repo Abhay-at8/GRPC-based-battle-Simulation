@@ -207,7 +207,6 @@ class Game(game_pb2_grpc.GameServicer):
                     self.alive_soldiers.remove(int(soldier.soldierID))
                     if soldier.soldierID == self.commanderId:
                         print("Commander died")
-                        print(int(soldier.soldierID))
                         # if int(soldier.soldierID) in self.alive_soldiers:
                         # print("Deleting commander from alive list")
 
@@ -391,19 +390,27 @@ class Game(game_pb2_grpc.GameServicer):
         iteration, and a flag indicating whether all soldiers are dead.
         """
 
-        all_dead = False
+        while True:
+            if self.update_cntr==len(self.soldiers):
+                time.sleep(2)
+                break
+
+        all_dead=False
         if not self.commander_alive:
-            if len(self.alive_soldiers) > 0:
-                index = random.randint(0, len(self.alive_soldiers) - 1)
-                self.commanderId = self.alive_soldiers[index]
+            if len(self.alive_soldiers)>0:
+                index = random.randint(0, len(self.alive_soldiers)-1)
+                self.commanderId=self.alive_soldiers[index]
             else:
-                all_dead = True
+                all_dead=True
             # while not self.soldiers[index].alive:
             #     index = random.randint(0, len(self.soldiers) - 1)
-            # self.commanderId=self.soldiers[index].soldierID
-            self.commander_alive = True
-            print(f"Commander died. New commnder is soldier{self.commanderId}\n")
-        return game_pb2.Commander_alive_response(commanderId=self.commanderId, time=self.t, all_dead=all_dead)
+            #self.commanderId=self.soldiers[index].soldierID
+            self.commander_alive=True
+            if all_dead:
+                print(f"commander along with other soldiers died..cannot choose new commander")
+            else:
+                print(f"Commander died. New commnder is soldier{self.commanderId}\n")
+        return game_pb2.Commander_alive_response(commanderId=self.commanderId,time=self.t,all_dead=all_dead)
 
 
 def server():

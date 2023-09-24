@@ -8,10 +8,14 @@ import time
 from threading import Thread
 
 # Global variable to track the current time step.
-t = 0
+
 
 
 def run():
+    global t
+    global commander_id
+    t=0
+
     """Starts a new game session for the soldier.
 
     This function performs the following steps:
@@ -45,11 +49,11 @@ def run():
 
     # create a request with a message
     obj = s1.Soldier(x, y, s, int(response.message))
-    # print(obj)
+
     border_msg(obj.__str__())
 
-    commander_thread = Thread(target=commander_activities, args=[obj, stub, T, commander_id])
-    soldier_thread = Thread(target=soldier_action, args=[obj, stub, T, commander_id, N])
+    commander_thread = Thread(target=commander_activities, args=[obj, stub, T ])
+    soldier_thread = Thread(target=soldier_action, args=[obj, stub, T, N])
 
     commander_thread.start()
     soldier_thread.start()
@@ -58,7 +62,7 @@ def run():
     soldier_thread.join()
 
 
-def commander_activities(obj, stub, T, commander_id):
+def commander_activities(obj, stub, T, ):
     """The commander thread function.
 
     This function performs the following steps:
@@ -73,37 +77,42 @@ def commander_activities(obj, stub, T, commander_id):
         obj: The soldier object.
         stub: The game stub object.
         T: The time or number of missile firings.
-        commander_id: The commander ID.
     """
 
     try:
-        global t
-        print("Commander is {}".format(commander_id))
-        if obj.soldierID == commander_id and obj.alive:
-            while t < T and commander_id == obj.soldierID:
-                print(f"sending missile {t} warning from commander\n\n")
-                res = stub.sendMissile(game_pb2.Empty())
-                t = t + 1
-                time.sleep(10)
-                res = stub.status_all(game_pb2.Empty())
-                print(res.message)
-                time.sleep(5)
-                res = stub.print_layout(game_pb2.Empty())
-                print(res.message)
-                print('\n\n')
-            print("Game ends here")
-            if t == T:
+        global t 
+        global commander_id
+        while t<T and obj.alive:
+            
+            if obj.soldierID == commander_id and obj.alive:
+                print("Commnader is {}".format(commander_id))
+                while t < T  and obj.alive:
+                    print(f"sending missile {t} warning from commander\n\n")
+                    res = stub.sendMissile(game_pb2.Empty())
+                    t = t + 1
+                    time.sleep(10)
+                    res = stub.status_all(game_pb2.Empty())
+                    print(res.message)
+                    time.sleep(5)
+                    res = stub.print_layout(game_pb2.Empty())
+                    print(res.message)
+                    print('\n')
+                    
+                    print("--------------------------------------")
+                print("Game ends here")
+            
+            if t==T:
                 res = stub.game_status(game_pb2.Empty())
-                #print(res.message)
                 border_msg(res.message)
-
+            
             time.sleep(10)
+        exit()
 
     except Exception as e:
         print(e)
 
 
-def soldier_action(obj, stub, T, commander_id, N):
+def soldier_action(obj, stub, T, N):
     """The soldier thread function.
 
     This function performs the following steps:
@@ -116,9 +125,10 @@ def soldier_action(obj, stub, T, commander_id, N):
         obj: The soldier object.
         stub: The game stub object.
         T: The time or number of missile firings.
-        commander_id: The commander ID.
         N: The battlefield matrix size.
     """
+    global t
+    global commander_id
 
     response_iterator = stub.missile_approach(game_pb2.Empty())
     # all_dead = False
@@ -133,25 +143,30 @@ def soldier_action(obj, stub, T, commander_id, N):
                 game_pb2.Update(alive=obj.alive, x=obj.x_cord, y=obj.y_cord, message=msg,
                                 soldierID=obj.soldierID))
 
-            # res = stub.is_commander_alive(
-            #     game_pb2.Empty())  # return the commanderId of current commander if alive else of
-            # # checking if old commander is dead and if the current soldier is the new commander
-            # if commander_id != res.commanderId and obj.soldierID == res.commanderId:
-            #     commander_id = res.commanderId
-            #     t = res.time
-            #     var = res.all_dead
-            #     print("I am new Commander")
-            #     break
-            #     print(f"Commander is dead with soldierId {commander_id}")
-            #     print(f"Solider {obj.soldierID} is now the new commander.")
-            #     # starting a new thread for the commander activities
-            #     commander_thread = Thread(target=commander_activities, args=[obj, stub, T, res.commanderId])
-            #     commander_thread.start()
-            #     commander_thread.join()
+            res = stub.is_commander_alive(game_pb2.Empty())  
+            if res.all_dead:
+                t=T
+                print("All dead")
+                break
+
+            if commander_id != res.commanderId and obj.soldierID == res.commanderId:
+                time.sleep(5)
+                commander_id = res.commanderId
+                print(f"commander dead : before t")
+                t=res.time
+                var=res.all_dead
+                print(f"After t {t}")
+                print("I am new Commander")
+                time.sleep(2)
+            if not obj.alive:
+                break
+                
 
         else:
             break
     print("out of Stream")
+    if obj.alive:
+        t=T
 
 
 def border_msg(msg):
