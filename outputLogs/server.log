@@ -1,0 +1,267 @@
+GAME STARTING....
+
+Registered soldier 1
+
+Registered soldier 2
+
+Registered soldier 3
+
+Registered soldier 4
+
+Registered soldier 5
+
+Soldier 1 chosen as the commander
+
+**********************************************************************
+* Missile Iteration 1:                                               *
+* Warning from commander: Missile 1 approaching at (9,8) of radius 3 *
+**********************************************************************
+
+
+Commander requested status of all soldier.
+Waiting for updates...
+
+
+Soldier 3 out of red zone. 
+ 
+Soldier 1 out of red zone. 
+ 
+Soldier 5 moved left by 3 from (8,8) to (5,8)
+ 
+Soldier 2 out of red zone. 
+ 
+Soldier 4 out of red zone. 
+ 
+
+Status of soldiers is as follows
+
+soldier Id : 1, status : alive
+soldier Id : 2, status : alive
+soldier Id : 3, status : alive
+soldier Id : 4, status : alive
+soldier Id : 5, status : alive
+
+
+The layout of battle field:
+
+Alive soldiers on the battlefield: [(1, 8, 3), (2, 9, 0), (3, 0, 9), (4, 0, 8), (5, 5, 8)]
+1(8,3) 2(9,0) 3(0,9) 4(0,8) 5(5,8) Missile at (9,8) of radius 3
+
+. . . . . . . . . 2
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . 1 .
+. . . . . . . . . .
+. . . . . . # # # #
+. . . . . . # . . .
+. . . . . . # . . .
+4 . . . . 5 # . . X
+3 . . . . . # . . .
+
+Iteration 1 over
+
+
+
+**********************************************************************
+* Missile Iteration 2:                                               *
+* Warning from commander: Missile 2 approaching at (4,4) of radius 3 *
+**********************************************************************
+
+
+Commander requested status of all soldier.
+Waiting for updates...
+
+
+Soldier 1 out of red zone. 
+ 
+Soldier 4 out of red zone. 
+ 
+Soldier 5 out of red zone. 
+ 
+Soldier 2 out of red zone. 
+ 
+Soldier 3 out of red zone. 
+ 
+
+Status of soldiers is as follows
+
+soldier Id : 1, status : alive
+soldier Id : 2, status : alive
+soldier Id : 3, status : alive
+soldier Id : 4, status : alive
+soldier Id : 5, status : alive
+
+
+The layout of battle field:
+
+Alive soldiers on the battlefield: [(1, 8, 3), (2, 9, 0), (3, 0, 9), (4, 0, 8), (5, 5, 8)]
+1(8,3) 2(9,0) 3(0,9) 4(0,8) 5(5,8) Missile at (4,4) of radius 3
+
+. . . . . . . . . 2
+. # # # # # # # . .
+. # . . . . . # . .
+. # . . . . . # 1 .
+. # . . X . . # . .
+. # . . . . . # . .
+. # . . . . . # . .
+. # # # # # # # . .
+4 . . . . 5 . . . .
+3 . . . . . . . . .
+
+Iteration 2 over
+
+
+
+**********************************************************************
+* Missile Iteration 3:                                               *
+* Warning from commander: Missile 3 approaching at (3,1) of radius 3 *
+**********************************************************************
+
+
+Commander requested status of all soldier.
+Waiting for updates...
+
+
+Soldier 5 out of red zone. 
+ 
+Soldier 3 out of red zone. 
+ 
+Soldier 1 out of red zone. 
+ 
+Soldier 2 out of red zone. 
+ 
+Soldier 4 out of red zone. 
+ 
+
+Status of soldiers is as follows
+
+soldier Id : 1, status : alive
+soldier Id : 2, status : alive
+soldier Id : 3, status : alive
+soldier Id : 4, status : alive
+soldier Id : 5, status : alive
+
+
+The layout of battle field:
+
+Alive soldiers on the battlefield: [(1, 8, 3), (2, 9, 0), (3, 0, 9), (4, 0, 8), (5, 5, 8)]
+1(8,3) 2(9,0) 3(0,9) 4(0,8) 5(5,8) Missile at (3,1) of radius 3
+
+# . . . . . # . . 2
+# . . X . . # . . .
+# . . . . . # . . .
+# . . . . . # . 1 .
+# # # # # # # . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+4 . . . . 5 . . . .
+3 . . . . . . . . .
+
+Iteration 3 over
+
+
+
+**********************************************************************
+* Missile Iteration 4:                                               *
+* Warning from commander: Missile 4 approaching at (1,1) of radius 2 *
+**********************************************************************
+
+
+Commander requested status of all soldier.
+Waiting for updates...
+
+
+Soldier 1 out of red zone. 
+ 
+Soldier 3 out of red zone. 
+ 
+Soldier 2 out of red zone. 
+ 
+Soldier 4 out of red zone. 
+ 
+Soldier 5 out of red zone. 
+ 
+
+Status of soldiers is as follows
+
+soldier Id : 1, status : alive
+soldier Id : 2, status : alive
+soldier Id : 3, status : alive
+soldier Id : 4, status : alive
+soldier Id : 5, status : alive
+
+
+The layout of battle field:
+
+Alive soldiers on the battlefield: [(1, 8, 3), (2, 9, 0), (3, 0, 9), (4, 0, 8), (5, 5, 8)]
+1(8,3) 2(9,0) 3(0,9) 4(0,8) 5(5,8) Missile at (1,1) of radius 2
+
+. . . # . . . . . 2
+. X . # . . . . . .
+. . . # . . . . . .
+# # # # . . . . 1 .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+4 . . . . 5 . . . .
+3 . . . . . . . . .
+
+Iteration 4 over
+
+
+
+**********************************************************************
+* Missile Iteration 5:                                               *
+* Warning from commander: Missile 5 approaching at (3,8) of radius 1 *
+**********************************************************************
+
+
+Commander requested status of all soldier.
+Waiting for updates...
+
+
+Soldier 2 out of red zone. 
+ 
+Soldier 4 out of red zone. 
+ 
+Soldier 3 out of red zone. 
+ 
+Soldier 5 out of red zone. 
+ 
+Soldier 1 out of red zone. 
+ 
+
+Status of soldiers is as follows
+
+soldier Id : 1, status : alive
+soldier Id : 2, status : alive
+soldier Id : 3, status : alive
+soldier Id : 4, status : alive
+soldier Id : 5, status : alive
+
+
+The layout of battle field:
+
+Alive soldiers on the battlefield: [(1, 8, 3), (2, 9, 0), (3, 0, 9), (4, 0, 8), (5, 5, 8)]
+1(8,3) 2(9,0) 3(0,9) 4(0,8) 5(5,8) Missile at (3,8) of radius 1
+
+. . . . . . . . . 2
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . 1 .
+. . . . . . . . . .
+. . . . . . . . . .
+. . . . . . . . . .
+. . # # # . . . . .
+4 . # X # 5 . . . .
+3 . # # # . . . . .
+
+Iteration 5 over
+
+
+
+******************************************
+* 5 out of 5 are alive. Game is won !!!! *
+******************************************

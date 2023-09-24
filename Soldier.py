@@ -1,6 +1,15 @@
 class Soldier:
 
     def __init__(self, x_cord, y_cord, speed, soldierid):
+        """ Initializes a new soldier object.
+
+            Args:
+                x_cord: The soldier's initial x-coordinate. This is the soldier's position on the battlefield.
+                y_cord: The soldier's initial y-coordinate. This is the soldier's position on the battlefield.
+                speed: The soldier's speed. This is how far the soldier can move in one time step.
+                soldierid: The soldier's ID. This is a unique identifier for the soldier.
+        """
+
         self.x_cord = x_cord
         self.y_cord = y_cord
         self.speed = speed
@@ -8,16 +17,42 @@ class Soldier:
         self.soldierID = soldierid
 
     def __str__(self):
-        return f'id:{self.soldierID} x: {self.x_cord} y:{self.y_cord} speed :{self.speed}'
+        """ Returns a string representation of the soldier object.
 
+            Returns: A string representation of the soldier object. This string includes the soldier's ID,
+            x-coordinate, y-coordinate, and speed.
+        """
+        # f'Soldier with ID: {self.soldierID} at (x:{self.x_cord},y:{self.y_cord}) with speed:{self.speed}'
+        soldier_string = f'Soldier ID: {self.soldierID} \nInitial Position: (x:{self.x_cord},y:{self.y_cord})\nSpeed:{self.speed} '
+        return soldier_string
+
+    # checking if a soldier is in redzone after a missile approach
     def in_redzone(self, missile):
-        return (missile.left_bdry <= self.x_cord <= missile.right_bdry and \
-                missile.bottom_bdry >= self.y_cord >= missile.top_bdry)
+        """ Checks if the soldier is in the red zone of the missile.
 
+         Args:
+             missile: The missile object.
+
+         Returns:
+             True if the soldier is in the red zone of the missile, False otherwise.
+         """
+
+        return missile.left_bdry <= self.x_cord <= missile.right_bdry and missile.bottom_bdry >= self.y_cord >= missile.top_bdry
+
+    # soldier movement after a missile approach based on its position
     def take_shelter(self, missile, N):
-        # print(missile.right_bdry)
-        if self.in_redzone(missile):
+        """ Takes shelter from the missile.
 
+          Args:
+              missile: The missile object.
+              N: The battlefield matrix size.
+
+          Returns:
+              A string message indicating whether the soldier was able to take shelter successfully or not.
+        """
+        # if soldier in the red zone change the soldier coordinates and record soldier movement
+        if self.in_redzone(missile):
+            # Move the soldier in a safe direction, if possible.
             if missile.right_bdry < (self.x_cord + self.speed) < N:
                 soldier_movement = f'Soldier {self.soldierID} moved right by {self.speed} from ({self.x_cord},{self.y_cord}) to '
                 self.x_cord = self.x_cord + self.speed
@@ -35,10 +70,13 @@ class Soldier:
                 self.y_cord = self.y_cord + self.speed
                 soldier_movement += f'({self.x_cord},{self.y_cord})\n'
             else:
+                # The soldier cannot move to safe location before missile hit, so it dies.
                 soldier_movement = f'Soldier {self.soldierID} died \n'
                 self.alive = False
+
         else:
-            soldier_movement = f'Soldier {self.soldierID} out of red zone \n'
+            # The soldier is already out of the red zone.
+            soldier_movement = f'Soldier {self.soldierID} out of red zone. \n'
         return soldier_movement
 
 
@@ -57,24 +95,28 @@ def was_hit(soldierID, trueFlag):
 class Missile:
 
     def __init__(self, x_cord, y_cord, rad):
+        """ Initializes a new missile object.
+
+                 Args:
+                     x_cord: The missile's initial x-coordinate. This is the missile's position on the battlefield.
+                     y_cord: The missile's initial y-coordinate. This is the missile's position on the battlefield.
+                     rad: The missile's radius. This is the size of the missile's explosion zone.
+        """
+
         self.x_cord = x_cord
         self.y_cord = y_cord
         self.rad = rad
 
-        # missile impact radius boundaries
+        # Calculate the missile's red zone. This is the area around the missile that will be affected by the explosion.
         self.left_bdry = self.x_cord - self.rad
         self.right_bdry = self.x_cord + self.rad
         self.top_bdry = self.y_cord - self.rad
         self.bottom_bdry = self.y_cord + self.rad
 
-        # out of field condn
-        '''if(self.bottom_bdry>N or self.right_bdry>N):
-      self.right_bdry=self.bottom_bdry=N
-    if (self.left_bdry<0 or self.top_bdry<0 ):
-      self.top_bdry=self.left_bdry=0'''
-
-        # print(self.right_bdry,self.left_bdry,self.top_bdry, self.bottom_bdry)
-
     def __str__(self):
+        """Returns a string representation of the missile object.
+
+                Returns: A string representation of the missile object. This string includes the missile's
+                x-coordinate, y-coordinate, and radius.
+        """
         return f'at ({self.x_cord},{self.y_cord}) of radius {self.rad}'
-        #return f' x:{self.x_cord} y:{self.y_cord} radius :{self.rad}'
