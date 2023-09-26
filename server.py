@@ -37,20 +37,24 @@ class Game(game_pb2_grpc.GameServicer):
         self.dead_soldiers = []  # a list to store dead soldier objects
         self.game_over = False  # game over flag
         self.t = 0  # running time
+        dead_in_iteration=""
 
         # storing hyperparameters from command line args into Game object attributes N, M and T.
         try:
             self.N = int(sys.argv[1])  # Battlefield Matrix size
             self.M = int(sys.argv[2])  # No of soldiers along with commander
+            self.T = int(sys.argv[3])  # Time or no of missiles firings
+            self.S = int(sys.argv[4])  # max speed of soldier
+            
             # setting one of the M soldiers as initial commander randomly
             self.commanderId = random.randint(1, self.M)
             # print(f"GAME STARTING....\nSoldier {self.commanderId} is commander\n")
             print(f"GAME STARTING....\n")
-            self.T = int(sys.argv[3])  # Time or no of missiles firings
+            
 
         except:
-            print("Fatal: You forgot to include the matrix size,no of soldiers, time/no of iteration.")
-            print("Usage: python server.py arg1 arg2 arg3 -> Refer to readme.txt")
+            print("Fatal: You forgot to include the matrix size,no of soldiers, time/no of iteration, Soldiers max speed.")
+            print("Usage: python server.py arg1 arg2 arg3 arg4-> Refer to readme.txt")
             sys.exit(1)
 
     def border_msg(self, msg):
@@ -105,8 +109,8 @@ class Game(game_pb2_grpc.GameServicer):
          Returns:
              A game_pb2.Response object containing a message indicating whether the game is won or lost.
          """
-
-        if len(self.soldiers) >= 0.5 * self.M:
+        time.sleep(5)
+        if self.M-len(self.dead_soldiers) < 0.5 * self.M:
             msg = f"{len(self.soldiers)} out of {self.M} are alive. Game is won !!!!"
         else:
             msg = f"{len(self.soldiers)} out of {self.M} are alive. Game is lost :("
@@ -121,7 +125,7 @@ class Game(game_pb2_grpc.GameServicer):
     def initiaze(self, request, context):
         """
         Sends the initial values of the game to the client, including the commander ID, battlefield matrix size,
-        number of soldiers, and number of missile firings.
+        number of soldiers, and number of missile firings and max speed of soldier.
 
         Args:
             request: A game_pb2.Empty object.
@@ -131,7 +135,7 @@ class Game(game_pb2_grpc.GameServicer):
             A game_pb2.InitialValues object with the initial values of the game.
         """
 
-        return game_pb2.InitialValues(sol_id=self.commanderId, N=self.N, M=self.M, T=self.T)
+        return game_pb2.InitialValues(commander_id=self.commanderId, N=self.N, M=self.M, T=self.T, S=self.S)
 
     def status_all(self, request, context):
         """
@@ -150,8 +154,8 @@ class Game(game_pb2_grpc.GameServicer):
             Returns:
                 A game_pb2.Response object with the status of all soldiers.
         """
-
-        print(f"Commander requested status of all soldier.\nWaiting for updates...\n\n")
+        self.dead_in_iteration=""
+        print(f"\nCommander requested status of all soldier.\nWaiting for updates...\n\n")
         while True:
             if self.update_cntr == len(self.soldiers):
                 print(f"{self.soldier_msg_list}")
@@ -161,17 +165,29 @@ class Game(game_pb2_grpc.GameServicer):
                 break
 
         msg = "\n"
+        #print(f"iterating soldiers in statusall {len(self.soldiers)}\n\n")
+
+        time.sleep(1)
         for soldier in self.soldiers:
             # print(f"before: {soldier}\n")
             msg += f"soldier Id : {soldier.soldierID}"
 
             if soldier.alive:
                 msg += ", status : alive\n"
+                #print(f"Alive {soldier.soldierID} from alive soldiers")
             else:
                 msg += ", status : dead\n"
-                self.dead_soldiers.append(soldier)
-                self.soldiers.remove(soldier)
-        print(f"Status of soldiers is as follows\n{msg}\n")
+                self.dead_soldiers.append(soldier.soldierID)
+                self.dead_in_iteration+=f"{soldier.soldierID} "
+                #self.soldiers.remove(soldier)
+
+
+        for soldier in self.soldiers:
+            if not soldier.alive:
+                self.soldiers.remove(soldier)  
+
+        #print(f"In staus_all: Status of soldiers is as follows\n{msg}\n")
+        time.sleep(5)
         return game_pb2.Response(message=msg)
 
     def update_cordinates(self, request, context):
@@ -192,8 +208,8 @@ class Game(game_pb2_grpc.GameServicer):
         """
 
         # print(f"\n updates recieved {request}\n")
-        self.update_cntr += 1
-        # print(f"Update_cntr: {self.update_cntr}\n")
+        
+        # print(f"Update_cntr: {self.update_cntr}\n")N
 
         self.soldier_msg_list += f"{request.message} \n"
         for soldier in self.soldiers:
@@ -205,6 +221,7 @@ class Game(game_pb2_grpc.GameServicer):
                 else:
                     soldier.alive = False
                     self.alive_soldiers.remove(int(soldier.soldierID))
+                    #print(f"In Update_cords:Removed {soldier.soldierID} from alive soldiers")
                     if soldier.soldierID == self.commanderId:
                         print("Commander died")
                         # if int(soldier.soldierID) in self.alive_soldiers:
@@ -212,6 +229,7 @@ class Game(game_pb2_grpc.GameServicer):
 
                         self.commander_alive = False
             # print(f"after: {soldier}\n\n")
+        self.update_cntr += 1
 
         return game_pb2.Empty()
 
@@ -228,14 +246,16 @@ class Game(game_pb2_grpc.GameServicer):
              context: A grpc.server.Context object.
 
          Returns:
-             A game_pb2.ServerOutput object containing the soldier's unique ID.
+             A game_pb2.ServerOutput object containing the soldier's unique ID and -1 if no client > N.
          """
-
+        if(self.soldierId==self.M ):
+            print(f"{self.M} Clients already connected. Cannot connect anymore clients")
+            return game_pb2.ServerOutput(message="-1")
         self.soldierId += 1
         sol_id = self.soldierId
         sol = s1.Soldier(request.x, request.y, request.speed, self.soldierId)
         self.soldiers.append(sol)
-        print(f"Registered soldier {sol_id}\n")
+        print(f"Registered soldier {sol_id} (x:{request.x},y:{request.y})\n")
         # print(sol_id)
         # print(f"Got request {request}\n" )
         time.sleep(2)
@@ -245,7 +265,7 @@ class Game(game_pb2_grpc.GameServicer):
         if len(self.soldiers) == self.M:
             print(f"Soldier {self.commanderId} chosen as the commander\n")
 
-        return game_pb2.ServerOutput(message='{0}'.format(self.soldierId))
+        return game_pb2.ServerOutput(message="{0}".format(self.soldierId))
 
     def sendMissile(self, request, context):
         def sendMissile(self, request, context):
@@ -284,6 +304,28 @@ class Game(game_pb2_grpc.GameServicer):
             time.sleep(5)
             self.game_over = True
         return game_pb2.Empty()
+    
+    def was_hit(self, request, context):
+        """
+        checks if a soldier was hit or not and returns True value if hit
+
+        Args:
+                request: A game_pb2.Empty object.
+                context: A grpc.server.Context object.
+
+        Returns:
+                A game_pb2.wasHit object which return flag and soldier id if hit.
+
+        """
+        print(f"Got was hit call from commander for soldier {request.soldierID}\n")
+        x=request.soldierID
+        if x in self.dead_soldiers:
+            print(f"Soldier {x} was hit")
+            request.trueFlag=True
+        else:
+            print(f"Soldier {x} was not hit")
+        return game_pb2.wasHit(soldierID=x,trueFlag=request.trueFlag)
+
 
     def missile_approach(self, request, context):
         """
@@ -323,24 +365,32 @@ class Game(game_pb2_grpc.GameServicer):
         Returns:
             A game_pb2.Request object containing a message with the layout of the battlefield.
         """
-
         N = self.N
         missile = self.missiles[self.t - 1]
         print(f"The layout of battle field:\n")
 
         # list for printing soldiers
-        soldierSet = []
+        # soldierSet = []
 
-        for soldier in self.soldiers:
-            # appending a tuple of the soldier coordinates to the list
-            soldierSet.append((soldier.x_cord, soldier.y_cord))
+        # for soldier in self.soldiers:
+        #     # appending a tuple of the soldier coordinates to the list
+        #     soldierSet.append((soldier.x_cord, soldier.y_cord))
 
         # print(f"Alive soldiers coordinates on the battlefield: {soldierSet}")
 
-        obj_map = [(soldier.soldierID, soldier.x_cord, soldier.y_cord) for soldier in self.soldiers]
-        print(f"Alive soldiers on the battlefield:")
+        obj_map = [(soldier.soldierID, soldier.x_cord, soldier.y_cord) for soldier in self.soldiers if soldier.alive]
+
+
+        print(f"Alive soldiers on the battlefield in current iteration {self.t}:")
+        if(len(obj_map)==0):
+            print("None")
         for soldierID, x, y in obj_map:
             print(f"{soldierID}({x},{y})", end=" ")
+        print(f"\nDead soldiers in current iteration {self.t}:")
+        if(len(self.dead_soldiers)==0):
+            print("None")
+        else:
+            print(self.dead_in_iteration)
 
         mat = [['.' for x in range(N)] for y in range(N)]
 
@@ -369,8 +419,8 @@ class Game(game_pb2_grpc.GameServicer):
             for i in row:
                 msg += f"{str(i)} "
             msg += "\n"
-        print(f'\nIteration {self.t} over\n')
-        print('\n')
+        print(f"\nIteration {self.t} over\n\n")
+
 
         return game_pb2.Request(message=msg)
 
@@ -422,7 +472,7 @@ def server():
     This function blocks until the server is terminated.
     """
 
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=11))
     game_pb2_grpc.add_GameServicer_to_server(Game(), server)
     server.add_insecure_port('[::]:50051')
     server.start()

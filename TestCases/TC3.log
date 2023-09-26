@@ -1,0 +1,105 @@
+""""""""""""""""""""
+python .\run_server.py 10 3 2 4
+
+Command died. and new commander was chosen
+"""""""""""""""""""""""""""""""
+
+
+GAME STARTING....
+
+Registered soldier 1 (x:3,y:6)
+
+Registered soldier 2 (x:4,y:5)
+
+Registered soldier 3 (x:4,y:8)
+
+Soldier 3 chosen as the commander
+
+
+**********************************************************************
+* Missile Iteration 1:                                               *
+* Warning from commander: Missile 1 approaching at (4,7) of radius 4 *
+**********************************************************************
+
+
+Commander died
+Commander died. New commnder is soldier2
+
+
+Commander requested status of all soldier.
+Waiting for updates...
+
+
+Soldier 1 died 
+ 
+Soldier 2 moved backwards by 4 from (4,5) to (4,1)
+ 
+Soldier 3 died 
+ 
+
+The layout of battle field:
+
+Alive soldiers on the battlefield in current iteration 1:
+2(4,1) 
+Dead soldiers in current iteration 1:
+1 3 
+
+Missile at (4,7) of radius 4
+
+. . . . . . . . . .
+. . . . 2 . . . . .
+. . . . . . . . . .
+# # # # # # # # # .
+# . . . . . . . # .
+# . . . . . . . # .
+# . . . . . . . # .
+# . . . X . . . # .
+# . . . . . . . # .
+# . . . . . . . # .
+
+Iteration 1 over
+
+
+**********************************************************************
+* Missile Iteration 2:                                               *
+* Warning from commander: Missile 2 approaching at (1,6) of radius 3 *
+**********************************************************************
+
+
+
+Commander requested status of all soldier.
+Waiting for updates...
+
+
+Soldier 2 out of red zone. 
+ 
+
+The layout of battle field:
+
+Alive soldiers on the battlefield in current iteration 2:
+2(4,1) 
+Dead soldiers in current iteration 2:
+
+
+Missile at (1,6) of radius 3
+
+. . . . . . . . . .
+. . . . 2 . . . . .
+. . . . . . . . . .
+# # # # # . . . . .
+. . . . # . . . . .
+. . . . # . . . . .
+. X . . # . . . . .
+. . . . # . . . . .
+. . . . # . . . . .
+# # # # # . . . . .
+
+Iteration 2 over
+
+
+Got was hit call from commander for soldier 2
+
+Soldier 2 was not hit
+*****************************************
+* 1 out of 3 are alive. Game is lost :( *
+*****************************************

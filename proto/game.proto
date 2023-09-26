@@ -12,8 +12,14 @@ service Game {
    rpc initiaze(Empty) returns(InitialValues);
    rpc game_status(Empty) returns(Response);
    rpc is_commander_alive(Empty) returns(Commander_alive_response);
+   rpc was_hit(wasHit) returns(wasHit);
 }
 message Empty {}
+
+message wasHit{
+   int32 soldierID=1;
+   bool trueFlag=2;
+}
 
 message Soldier {
    int32  x = 1;
@@ -21,10 +27,11 @@ message Soldier {
    int32 speed=3;
 }
 message InitialValues{
-   int32 sol_id=1;
+   int32 commander_id=1;
    int32 N=2;
    int32 M=3;
    int32 T=4;
+   int32 S=5;
 
 }
 message Update{

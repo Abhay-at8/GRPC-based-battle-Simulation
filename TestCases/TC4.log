@@ -1,16 +1,25 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+python .\run_server.py 10 3 2 4
+
+To not allow more then M clients to connect here M=3
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+
 GAME STARTING....
 
-Registered soldier 1 (x:2,y:9)
+Registered soldier 1 (x:1,y:9)
 
-Registered soldier 2 (x:6,y:6)
+Registered soldier 2 (x:6,y:1)
 
-Registered soldier 3 (x:9,y:9)
+Registered soldier 3 (x:6,y:0)
 
 Soldier 3 chosen as the commander
 
+3 Clients already connected. Cannot connect anymore clients
 **********************************************************************
 * Missile Iteration 1:                                               *
-* Warning from commander: Missile 1 approaching at (5,0) of radius 2 *
+* Warning from commander: Missile 1 approaching at (1,5) of radius 2 *
 **********************************************************************
 
 
@@ -19,9 +28,9 @@ Commander requested status of all soldier.
 Waiting for updates...
 
 
-Soldier 1 out of red zone. 
- 
 Soldier 3 out of red zone. 
+ 
+Soldier 1 out of red zone. 
  
 Soldier 2 out of red zone. 
  
@@ -29,70 +38,70 @@ Soldier 2 out of red zone.
 The layout of battle field:
 
 Alive soldiers on the battlefield in current iteration 1:
-1(2,9) 2(6,6) 3(9,9) 
+1(1,9) 2(6,1) 3(6,0) 
 Dead soldiers in current iteration 1:
 None
 
-Missile at (5,0) of radius 2
+Missile at (1,5) of radius 2
 
-. . . # . X . # . .
-. . . # . . . # . .
-. . . # # # # # . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
+. . . . . . 3 . . .
 . . . . . . 2 . . .
 . . . . . . . . . .
+# # # # . . . . . .
+. . . # . . . . . .
+. X . # . . . . . .
+. . . # . . . . . .
+# # # # . . . . . .
 . . . . . . . . . .
-. . 1 . . . . . . 3
+. 1 . . . . . . . .
 
 Iteration 1 over
 
 
 **********************************************************************
 * Missile Iteration 2:                                               *
-* Warning from commander: Missile 2 approaching at (3,7) of radius 4 *
+* Warning from commander: Missile 2 approaching at (4,3) of radius 4 *
 **********************************************************************
 
+
+Commander died
+Commander died. New commnder is soldier2
 
 
 Commander requested status of all soldier.
 Waiting for updates...
 
 
-Soldier 1 died 
+Soldier 3 died 
  
-Soldier 2 died 
+Soldier 2 moved right by 3 from (6,1) to (9,1)
  
-Soldier 3 out of red zone. 
+Soldier 1 out of red zone. 
  
 
 The layout of battle field:
 
 Alive soldiers on the battlefield in current iteration 2:
-3(9,9) 
+1(1,9) 2(9,1) 
 Dead soldiers in current iteration 2:
-1 2 
+3 
 
-Missile at (3,7) of radius 4
+Missile at (4,3) of radius 4
 
+# . . . . . . . # .
+# . . . . . . . # 2
+# . . . . . . . # .
+# . . . X . . . # .
+# . . . . . . . # .
+# . . . . . . . # .
+# . . . . . . . # .
+# # # # # # # # # .
 . . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-# # # # # # # # . .
-. . . . . . . # . .
-. . . . . . . # . .
-. . . . . . . # . .
-. . . X . . . # . .
-. . . . . . . # . .
-. . . . . . . # . 3
+. 1 . . . . . . . .
 
 Iteration 2 over
 
 
-Got was hit call from commander for soldier 2
-
-Soldier 2 was hit
 ******************************************
 * 2 out of 3 are alive. Game is won !!!! *
 ******************************************

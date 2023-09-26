@@ -64,6 +64,11 @@ class GameStub(object):
                 request_serializer=game__pb2.Empty.SerializeToString,
                 response_deserializer=game__pb2.Commander_alive_response.FromString,
                 )
+        self.was_hit = channel.unary_unary(
+                '/Game/was_hit',
+                request_serializer=game__pb2.wasHit.SerializeToString,
+                response_deserializer=game__pb2.wasHit.FromString,
+                )
 
 
 class GameServicer(object):
@@ -129,6 +134,12 @@ class GameServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def was_hit(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_GameServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -181,6 +192,11 @@ def add_GameServicer_to_server(servicer, server):
                     servicer.is_commander_alive,
                     request_deserializer=game__pb2.Empty.FromString,
                     response_serializer=game__pb2.Commander_alive_response.SerializeToString,
+            ),
+            'was_hit': grpc.unary_unary_rpc_method_handler(
+                    servicer.was_hit,
+                    request_deserializer=game__pb2.wasHit.FromString,
+                    response_serializer=game__pb2.wasHit.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -359,5 +375,22 @@ class Game(object):
         return grpc.experimental.unary_unary(request, target, '/Game/is_commander_alive',
             game__pb2.Empty.SerializeToString,
             game__pb2.Commander_alive_response.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def was_hit(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Game/was_hit',
+            game__pb2.wasHit.SerializeToString,
+            game__pb2.wasHit.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -14,12 +14,12 @@
 # To run the run_server.py script, open a terminal window and navigate to the directory where the script is located.
 # Then, type the following command:
 
-# python run_server.py arg1 arg2 arg3
+# python run_server.py arg1 arg2 arg3 arg4
 
 # For example, to run the server.py program with a battlefield matrix size of 10, 3 soldiers, and 4 iterations,
 # you would type the following command:
 
-# python run_server.py 10 3 4
+# python run_server.py 10 3 4 5
 
 # The output of the server.py program will be redirected to the `server.log` file in the `outputLogs` directory.
 
@@ -31,6 +31,7 @@ try:
     arg1 = sys.argv[1]
     arg2 = sys.argv[2]
     arg3 = sys.argv[3]
+    arg4 = sys.argv[4]
 
 except:
     print("Fatal: You forgot to include the matrix size,no of soldiers, time/no of iteration.")
@@ -45,4 +46,4 @@ os.system('type nul > outputLogs/server.log')
 
 print("starting server.py..")
 
-os.system(f'python server.py {arg1} {arg2} {arg3} > outputLogs/server.log')
+os.system(f'python server.py {arg1} {arg2} {arg3} {arg4} > outputLogs/server.log')

@@ -14,6 +14,7 @@ from threading import Thread
 def run():
     global t
     global commander_id
+    global N
     t=0
 
     """Starts a new game session for the soldier.
@@ -37,15 +38,19 @@ def run():
     stub = game_pb2_grpc.GameStub(channel)
     res = stub.initiaze(game_pb2.Empty())
 
-    commander_id = res.sol_id
+    commander_id = res.commander_id
     N = res.N  # Battlefield Matrix size
     M = res.M  # No of soldiers along with commander
     T = res.T  # Time or no of missiles firings
+    S = res.S  # max speed of soldier
 
     x = random.randint(0, N - 1)
     y = random.randint(0, N - 1)
-    s = random.randint(1, 4)
+    s = random.randint(1, S)
     response = stub.register(game_pb2.Soldier(x=x, y=y, speed=s))
+    if response.message=='-1':
+        print(f"{M} Clients already connected. Cannot connect anymore clients")
+        exit(1)
 
     # create a request with a message
     obj = s1.Soldier(x, y, s, int(response.message))
@@ -100,6 +105,15 @@ def commander_activities(obj, stub, T, ):
                     
                     print("--------------------------------------")
                 print("Game ends here")
+
+                if obj.alive:
+                    x=random.randint(0, N - 1)
+                    #was_hit_flag=False
+                    res=stub.was_hit(game_pb2.wasHit(soldierID=x,trueFlag=False))
+                    if res.trueFlag:
+                        print(f"Soldier {x} was hit")
+                    else:
+                        print(f"Soldier {x} was not hit")
             
             if t==T:
                 res = stub.game_status(game_pb2.Empty())
@@ -150,7 +164,7 @@ def soldier_action(obj, stub, T, N):
                 break
 
             if commander_id != res.commanderId and obj.soldierID == res.commanderId:
-                time.sleep(5)
+                time.sleep(15)
                 commander_id = res.commanderId
                 print(f"commander dead : before t")
                 t=res.time
