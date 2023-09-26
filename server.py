@@ -188,6 +188,7 @@ class Game(game_pb2_grpc.GameServicer):
 
         #print(f"In staus_all: Status of soldiers is as follows\n{msg}\n")
         time.sleep(5)
+        print(msg)
         return game_pb2.Response(message=msg)
 
     def update_cordinates(self, request, context):
