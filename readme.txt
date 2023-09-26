@@ -1,3 +1,8 @@
+Group Details:
+1. Abhay Tripathi -> 2023H1120190P
+2. Shubham Kumar  -> 2023H1120191P
+
+
 Steps
 Step 1:First enable virtual environment using command python -m venv venv
 Step 2: activate virtual environment using command .\venv\Scripts\activate
