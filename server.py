@@ -110,7 +110,7 @@ class Game(game_pb2_grpc.GameServicer):
              A game_pb2.Response object containing a message indicating whether the game is won or lost.
          """
         time.sleep(5)
-        if self.M-len(self.dead_soldiers) < 0.5 * self.M:
+        if len(self.soldiers) >= 0.5 * self.M:
             msg = f"{len(self.soldiers)} out of {self.M} are alive. Game is won !!!!"
         else:
             msg = f"{len(self.soldiers)} out of {self.M} are alive. Game is lost :("
@@ -473,7 +473,7 @@ def server():
     This function blocks until the server is terminated.
     """
 
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=11))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=25))
     game_pb2_grpc.add_GameServicer_to_server(Game(), server)
     server.add_insecure_port('[::]:50051')
     server.start()

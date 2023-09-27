@@ -33,7 +33,8 @@ def run():
     M = 3
     T = 5
 
-    channel = grpc.insecure_channel("localhost:50051")
+    channel = grpc.insecure_channel("192.168.181.3:50051")
+    #channel = grpc.insecure_channel("localhost:50051")
     # create a stub for the service
     stub = game_pb2_grpc.GameStub(channel)
     res = stub.initiaze(game_pb2.Empty())
@@ -104,7 +105,7 @@ def commander_activities(obj, stub, T, ):
                     print('\n')
                     
                     print("--------------------------------------")
-                print("Game ends here")
+                #print("Game ends here")
 
                 if obj.alive:
                     x=random.randint(0, N - 1)
