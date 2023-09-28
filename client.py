@@ -33,8 +33,8 @@ def run():
     M = 3
     T = 5
 
-    channel = grpc.insecure_channel("192.168.181.3:50051")
-    #channel = grpc.insecure_channel("localhost:50051")
+    #channel = grpc.insecure_channel("192.168.181.3:50051")
+    channel = grpc.insecure_channel("localhost:50051")
     # create a stub for the service
     stub = game_pb2_grpc.GameStub(channel)
     res = stub.initiaze(game_pb2.Empty())
@@ -150,6 +150,7 @@ def soldier_action(obj, stub, T, N):
     # iterate over the responses and print them
     for res in response_iterator:
         # res = stub.missile_approach(game_pb2.Empty())
+        print(f"soldier {obj.soldierID} got new missile")
         if obj.alive:
             m = s1.Missile(res.x, res.y, res.rad)
             msg = obj.take_shelter(m, N)

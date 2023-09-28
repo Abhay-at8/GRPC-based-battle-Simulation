@@ -6,9 +6,9 @@ import game_pb2_grpc
 import Soldier as s1
 import time, random
 import sys
+import threading
 
-game_end = False
-
+lock=threading.Lock()
 
 class Game(game_pb2_grpc.GameServicer):
     """
@@ -18,12 +18,14 @@ class Game(game_pb2_grpc.GameServicer):
     The server also maintains a list of all soldiers and missiles, and updates the battlefield layout based on the
     soldiers' coordinates and the missile's trajectory.
     """
+    
     soldierId = 0
     soldiers = []
     commander_alive = True
     update_cntr = 0
     soldier_msg_list = ""
     alive_soldiers = [i for i in range(1, int(sys.argv[2]) + 1)]
+    iteration_over=True
 
     def __init__(self):
         """
@@ -156,35 +158,38 @@ class Game(game_pb2_grpc.GameServicer):
         """
         self.dead_in_iteration=""
         print(f"\nCommander requested status of all soldier.\nWaiting for updates...\n\n")
-        while True:
-            if self.update_cntr == len(self.soldiers):
-                print(f"{self.soldier_msg_list}")
-                self.soldier_msg_list = ""
-                self.update_cntr = 0
-                time.sleep(5)
-                break
+        with lock:
+            while True:
+                if self.update_cntr == len(self.soldiers):
+                    print(f"{self.soldier_msg_list}")
+                    self.soldier_msg_list = ""
+                    self.update_cntr = 0
+                    time.sleep(5)
+                    break
 
-        msg = "\n"
-        #print(f"iterating soldiers in statusall {len(self.soldiers)}\n\n")
+            msg = "\n"
+            #print(f"iterating soldiers in statusall {len(self.soldiers)}\n\n")
 
-        time.sleep(1)
-        for soldier in self.soldiers:
-            # print(f"before: {soldier}\n")
-            msg += f"soldier Id : {soldier.soldierID}"
+            time.sleep(1)
+            for soldier in self.soldiers:
+                # print(f"before: {soldier}\n")
+                msg += f"soldier Id : {soldier.soldierID}"
 
-            if soldier.alive:
-                msg += ", status : alive\n"
-                #print(f"Alive {soldier.soldierID} from alive soldiers")
-            else:
-                msg += ", status : dead\n"
-                self.dead_soldiers.append(soldier.soldierID)
-                self.dead_in_iteration+=f"{soldier.soldierID} "
-                #self.soldiers.remove(soldier)
+                if soldier.alive:
+                    msg += ", status : alive\n"
+                    #print(f"Alive {soldier.soldierID} from alive soldiers")
+                else:
+                    msg += ", status : dead\n"
+                    time.sleep(2)
+                    self.dead_soldiers.append(soldier.soldierID)
+                    self.dead_in_iteration+=f"{soldier.soldierID} "
+                    #self.soldiers.remove(soldier)
+                    #time.sleep(4)
 
 
-        for soldier in self.soldiers:
-            if not soldier.alive:
-                self.soldiers.remove(soldier)  
+            for soldier in self.soldiers:
+                if not soldier.alive:
+                    self.soldiers.remove(soldier)  
 
         #print(f"In staus_all: Status of soldiers is as follows\n{msg}\n")
         time.sleep(5)
@@ -252,25 +257,25 @@ class Game(game_pb2_grpc.GameServicer):
         if(self.soldierId==self.M ):
             print(f"{self.M} Clients already connected. Cannot connect anymore clients")
             return game_pb2.ServerOutput(message="-1")
-        self.soldierId += 1
-        sol_id = self.soldierId
-        sol = s1.Soldier(request.x, request.y, request.speed, self.soldierId)
-        self.soldiers.append(sol)
-        print(f"Registered soldier {sol_id} (x:{request.x},y:{request.y})\n")
-        # print(sol_id)
-        # print(f"Got request {request}\n" )
-        time.sleep(2)
-        # while True:
-        #     if(len(self.soldiers)==3):
-        #         break
-        if len(self.soldiers) == self.M:
-            print(f"Soldier {self.commanderId} chosen as the commander\n")
+        with lock:
+            self.soldierId += 1
+            sol_id = self.soldierId
+            sol = s1.Soldier(request.x, request.y, request.speed, self.soldierId)
+            self.soldiers.append(sol)
+            print(f"Registered soldier {sol_id} (x:{request.x},y:{request.y})\n")
+            # print(sol_id)
+            # print(f"Got request {request}\n" )
+            time.sleep(2)
+            # while True:
+            #     if(len(self.soldiers)==3):
+            #         break
+            if len(self.soldiers) == self.M:
+                print(f"Soldier {self.commanderId} chosen as the commander\n")
 
-        return game_pb2.ServerOutput(message="{0}".format(self.soldierId))
+            return game_pb2.ServerOutput(message="{0}".format(self.soldierId))
 
     def sendMissile(self, request, context):
-        def sendMissile(self, request, context):
-            """
+        """
             Sends a missile to a random location on the battlefield.
 
             This function is called by the commander to send a missile to a random location on the battlefield. The
@@ -284,27 +289,32 @@ class Game(game_pb2_grpc.GameServicer):
             Returns:
                 A game_pb2.Empty object.
             """
+        if self.iteration_over:
+        #def sendMissile(self, request, context):
 
-        # print(f"No of participants:{self.M}")
-        while True:
-            if len(self.soldiers) + len(self.dead_soldiers) == self.M:
-                break
+        
+            self.iteration_over=False
+            # print(f"No of participants:{self.M}")
+            while True:
+                if len(self.soldiers) + len(self.dead_soldiers) == self.M:
+                    break
 
-        time.sleep(5)
-        x = random.randint(0, self.N - 1)
-        y = random.randint(0, self.N - 1)
-        s = random.randint(1, 4)
-        m = s1.Missile(x_cord=x, y_cord=y, rad=s)
-        self.missiles.append(m)
-        self.t += 1
-        outputStr = f"Missile Iteration {self.t}:\nWarning from commander: Missile {self.t} approaching {m}"
-        self.border_msg(outputStr)
-        print("\n")
-
-        if self.t == self.T:
             time.sleep(5)
-            self.game_over = True
-        return game_pb2.Empty()
+            with lock:
+                x = random.randint(0, self.N - 1)
+                y = random.randint(0, self.N - 1)
+                s = random.randint(1, 4)
+                m = s1.Missile(x_cord=x, y_cord=y, rad=s)
+                self.missiles.append(m)
+                self.t += 1
+                outputStr = f"Missile Iteration {self.t}:\nWarning from commander: Missile {self.t} approaching {m}"
+                self.border_msg(outputStr)
+            print("\n")
+
+            if self.t == self.T:
+                time.sleep(5)
+                self.game_over = True
+            return game_pb2.Empty()
     
     def was_hit(self, request, context):
         """
@@ -344,12 +354,15 @@ class Game(game_pb2_grpc.GameServicer):
         """
         # print(f"attacking with missile\n")
         attack = 0
+        soldier_cnt=0
         while not self.game_over:
             while len(self.missiles) > attack:
                 m = self.missiles[attack]
                 # print(f"attacking with missile {attack} : {m}")
-                attack += 1
                 yield game_pb2.Missile(x=m.x_cord, y=m.y_cord, rad=m.rad)
+                soldier_cnt+=1
+                time.sleep(5)
+                attack += 1
         # print(f"missile attack over")
 
     def print_layout(self, request, context):
@@ -422,7 +435,7 @@ class Game(game_pb2_grpc.GameServicer):
             msg += "\n"
         print(f"\nIteration {self.t} over\n\n")
 
-
+        self.iteration_over=True
         return game_pb2.Request(message=msg)
 
     def is_commander_alive(self, request, context):
@@ -477,9 +490,12 @@ def server():
     game_pb2_grpc.add_GameServicer_to_server(Game(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
-    # if(game_end):
-    #     exit(1)
-    server.wait_for_termination()
+    try:
+        while True:
+            time.sleep(86400) #to keep server running
+    except KeyboardInterrupt:
+        server.stop(0)
+    #server.wait_for_termination()
 
 
 server()

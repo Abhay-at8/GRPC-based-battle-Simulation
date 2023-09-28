@@ -9,4 +9,4 @@ python_bin = "venv\\Scripts\\python"
 script_file = "client.py"
 for i in range(0,int(sys.argv[1])):
     subprocess.Popen([python_bin, script_file])
-    sleep(5)
+    #sleep(1)
