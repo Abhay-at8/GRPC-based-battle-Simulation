@@ -1,105 +1,304 @@
 """"""""""""""""""""
-python .\run_server.py 10 3 2 4
+python .\run_server.py 6 9 2 4
 
-basic test case  3 soldiers running for 2 iteration and at the end of iteration 0 solders died and 3 alive game won
+Initial commander died
 """""""""""""""""""""""""""""""
 
 
 GAME STARTING....
 
-Registered soldier 1 (x:3,y:6)
 
-Registered soldier 2 (x:4,y:5)
 
-Registered soldier 3 (x:4,y:8)
+Registered soldier 1 (x:0,y:5)
 
-Soldier 1 chosen as the commander
+
+
+Registered soldier 2 (x:3,y:1)
+
+
+
+Registered soldier 3 (x:5,y:0)
+
+
+
+Registered soldier 4 (x:5,y:1)
+
+
+
+Registered soldier 5 (x:0,y:1)
+
+
+
+Registered soldier 6 (x:2,y:0)
+
+
+
+Registered soldier 7 (x:4,y:1)
+
+
+
+Registered soldier 8 (x:0,y:0)
+
+
+
+Registered soldier 9 (x:4,y:4)
+
+
+
+Soldier 8 chosen as the commander
+
+
 
 **********************************************************************
+
 * Missile Iteration 1:                                               *
-* Warning from commander: Missile 1 approaching at (2,8) of radius 2 *
+
+* Warning from commander: Missile 1 approaching at (1,0) of radius 3 *
+
 **********************************************************************
+
+
+
+
+
+Commander died
+
+Commander died. New commnder is soldier6
+
+
 
 
 
 Commander requested status of all soldier.
+
 Waiting for updates...
 
 
+
+
+
 Soldier 1 out of red zone. 
+
  
+
+Soldier 7 moved forward by 4 from (4,1) to (4,5)
+
+ 
+
+Soldier 4 out of red zone. 
+
+ 
+
+Soldier 6 moved forward by 4 from (2,0) to (2,4)
+
+ 
+
+Soldier 9 out of red zone. 
+
+ 
+
+Soldier 5 moved forward by 4 from (0,1) to (0,5)
+
+ 
+
 Soldier 3 out of red zone. 
+
  
-Soldier 2 moved backwards by 1 from (2,6) to (2,5)
+
+Soldier 8 died 
+
  
+
+Soldier 2 moved forward by 4 from (3,1) to (3,5)
+
+ 
+
+
+
+
+
+soldier Id : 1, status : alive
+
+soldier Id : 2, status : alive
+
+soldier Id : 3, status : alive
+
+soldier Id : 4, status : alive
+
+soldier Id : 5, status : alive
+
+soldier Id : 6, status : alive
+
+soldier Id : 7, status : alive
+
+soldier Id : 8, status : dead
+
+soldier Id : 9, status : alive
+
+
 
 The layout of battle field:
 
+
+
 Alive soldiers on the battlefield in current iteration 1:
-1(5,9) 2(2,5) 3(5,8) 
+
+1(0,5) 2(3,5) 3(5,0) 4(5,1) 5(0,5) 6(2,4) 7(4,5) 9(4,4) 
+
 Dead soldiers in current iteration 1:
-None
 
-Missile at (2,8) of radius 2
+8 
 
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . 2 . . . . . . .
-# # # # # . . . . .
-# . . . # . . . . .
-# . X . # 3 . . . .
-# . . . # 1 . . . .
+
+
+Missile at (1,0) of radius 3
+
+
+
+. X . . # 3
+
+. . . . # 4
+
+. . . . # .
+
+# # # # # .
+
+. . 6 . 9 .
+
+5 . . 2 7 .
+
+
 
 Iteration 1 over
 
 
+
+
+
 **********************************************************************
+
 * Missile Iteration 2:                                               *
-* Warning from commander: Missile 2 approaching at (9,2) of radius 4 *
+
+* Warning from commander: Missile 2 approaching at (1,1) of radius 3 *
+
 **********************************************************************
+
+
+
+
+
+Commander died
+
+Commander died. New commnder is soldier2
+
+
 
 
 
 Commander requested status of all soldier.
+
 Waiting for updates...
 
 
-Soldier 1 out of red zone. 
+
+
+
+Soldier 5 out of red zone. 
+
  
+
+Soldier 6 died 
+
+ 
+
+Soldier 4 out of red zone. 
+
+ 
+
+Soldier 9 died 
+
+ 
+
 Soldier 2 out of red zone. 
+
  
+
+Soldier 1 out of red zone. 
+
+ 
+
+Soldier 7 out of red zone. 
+
+ 
+
 Soldier 3 out of red zone. 
+
  
+
+
+
+
+
+soldier Id : 1, status : alive
+
+soldier Id : 2, status : alive
+
+soldier Id : 3, status : alive
+
+soldier Id : 4, status : alive
+
+soldier Id : 5, status : alive
+
+soldier Id : 6, status : dead
+
+soldier Id : 7, status : alive
+
+soldier Id : 9, status : dead
+
+
 
 The layout of battle field:
 
+
+
 Alive soldiers on the battlefield in current iteration 2:
-1(5,9) 2(2,5) 3(5,8) 
+
+1(0,5) 2(3,5) 3(5,0) 4(5,1) 5(0,5) 7(4,5) 
+
 Dead soldiers in current iteration 2:
-None
 
-Missile at (9,2) of radius 4
+6 9 
 
-. . . . . # . . . .
-. . . . . # . . . .
-. . . . . # . . . X
-. . . . . # . . . .
-. . . . . # . . . .
-. . 2 . . # . . . .
-. . . . . # # # # #
-. . . . . . . . . .
-. . . . . 3 . . . .
-. . . . . 1 . . . .
+
+
+Missile at (1,1) of radius 3
+
+
+
+. . . . # 3
+
+. X . . # 4
+
+. . . . # .
+
+. . . . # .
+
+# # # # # .
+
+5 . . 2 7 .
+
+
 
 Iteration 2 over
 
 
-Got was hit call from commander for soldier 0
 
-Soldier 0 was not hit
+
+
 ******************************************
-* 3 out of 3 are alive. Game is won !!!! *
+
+* 6 out of 9 are alive. Game is won !!!! *
+
 ******************************************
+
+

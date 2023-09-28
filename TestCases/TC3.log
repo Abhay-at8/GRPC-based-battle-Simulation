@@ -1,105 +1,155 @@
 """"""""""""""""""""
-python .\run_server.py 10 3 2 4
+python .\run_server.py 5 9 2 4
 
-Command died. and new commander was chosen
+All soldiers died
 """""""""""""""""""""""""""""""
 
 
 GAME STARTING....
 
-Registered soldier 1 (x:3,y:6)
+Registered soldier 1 (x:0,y:3)
 
-Registered soldier 2 (x:4,y:5)
+Registered soldier 2 (x:0,y:0)
 
-Registered soldier 3 (x:4,y:8)
+Registered soldier 3 (x:0,y:3)
 
-Soldier 3 chosen as the commander
+Registered soldier 4 (x:4,y:2)
 
+Registered soldier 5 (x:1,y:3)
+
+Registered soldier 6 (x:3,y:0)
+
+Registered soldier 7 (x:2,y:2)
+
+Registered soldier 8 (x:3,y:2)
+
+Registered soldier 9 (x:4,y:4)
+
+Soldier 1 chosen as the commander
 
 **********************************************************************
 * Missile Iteration 1:                                               *
-* Warning from commander: Missile 1 approaching at (4,7) of radius 4 *
+* Warning from commander: Missile 1 approaching at (0,3) of radius 2 *
 **********************************************************************
 
 
 Commander died
-Commander died. New commnder is soldier2
+Commander died. New commnder is soldier6
 
 
 Commander requested status of all soldier.
 Waiting for updates...
 
 
+Soldier 4 out of red zone. 
+ 
+Soldier 9 out of red zone. 
+ 
+Soldier 7 moved right by 1 from (2,2) to (3,2)
+ 
+Soldier 6 out of red zone. 
+ 
+Soldier 5 moved right by 3 from (1,3) to (4,3)
+ 
+Soldier 3 moved right by 3 from (0,3) to (3,3)
+ 
+Soldier 8 out of red zone. 
+ 
+Soldier 2 out of red zone. 
+ 
 Soldier 1 died 
  
-Soldier 2 moved backwards by 4 from (4,5) to (4,1)
- 
-Soldier 3 died 
- 
+
+
+soldier Id : 1, status : dead
+soldier Id : 2, status : alive
+soldier Id : 3, status : alive
+soldier Id : 4, status : alive
+soldier Id : 5, status : alive
+soldier Id : 6, status : alive
+soldier Id : 7, status : alive
+soldier Id : 8, status : alive
+soldier Id : 9, status : alive
 
 The layout of battle field:
 
 Alive soldiers on the battlefield in current iteration 1:
-2(4,1) 
+2(0,0) 3(3,3) 4(4,2) 5(4,3) 6(3,0) 7(3,2) 8(3,2) 9(4,4) 
 Dead soldiers in current iteration 1:
-1 3 
+1 
 
-Missile at (4,7) of radius 4
+Missile at (0,3) of radius 2
 
-. . . . . . . . . .
-. . . . 2 . . . . .
-. . . . . . . . . .
-# # # # # # # # # .
-# . . . . . . . # .
-# . . . . . . . # .
-# . . . . . . . # .
-# . . . X . . . # .
-# . . . . . . . # .
-# . . . . . . . # .
+2 . . 6 .
+# # # . .
+. . # 8 4
+X . # 3 5
+. . # . 9
 
 Iteration 1 over
 
 
 **********************************************************************
 * Missile Iteration 2:                                               *
-* Warning from commander: Missile 2 approaching at (1,6) of radius 3 *
+* Warning from commander: Missile 2 approaching at (0,1) of radius 4 *
 **********************************************************************
 
 
+Commander died
+commander along with other soldiers died..cannot choose new commander
 
 Commander requested status of all soldier.
 Waiting for updates...
 
 
-Soldier 2 out of red zone. 
+Soldier 2 died 
  
+Soldier 9 died 
+ 
+Soldier 4 died 
+ 
+Soldier 7 died 
+ 
+Soldier 5 died 
+ 
+Soldier 6 died 
+ 
+Soldier 3 died 
+ 
+Soldier 8 died 
+ 
+
+
+soldier Id : 2, status : dead
+soldier Id : 3, status : dead
+soldier Id : 4, status : dead
+soldier Id : 5, status : dead
+soldier Id : 6, status : dead
+soldier Id : 7, status : dead
+soldier Id : 8, status : dead
+soldier Id : 9, status : dead
 
 The layout of battle field:
 
 Alive soldiers on the battlefield in current iteration 2:
-2(4,1) 
+None
+
 Dead soldiers in current iteration 2:
+2 3 4 5 6 7 8 9 
 
+Missile at (0,1) of radius 4
 
-Missile at (1,6) of radius 3
-
-. . . . . . . . . .
-. . . . 2 . . . . .
-. . . . . . . . . .
-# # # # # . . . . .
-. . . . # . . . . .
-. . . . # . . . . .
-. X . . # . . . . .
-. . . . # . . . . .
-. . . . # . . . . .
-# # # # # . . . . .
+. . . . #
+X . . . #
+. . . . #
+. . . . #
+. . . . #
 
 Iteration 2 over
 
 
-Got was hit call from commander for soldier 2
+*****************************************
+* 0 out of 9 are alive. Game is lost :( *
+*****************************************
 
-Soldier 2 was not hit
-*****************************************
-* 1 out of 3 are alive. Game is lost :( *
-*****************************************
+

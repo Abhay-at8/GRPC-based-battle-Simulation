@@ -111,18 +111,19 @@ class Game(game_pb2_grpc.GameServicer):
          Returns:
              A game_pb2.Response object containing a message indicating whether the game is won or lost.
          """
-        time.sleep(5)
-        if len(self.soldiers) >= 0.5 * self.M:
-            msg = f"{len(self.soldiers)} out of {self.M} are alive. Game is won !!!!"
-        else:
-            msg = f"{len(self.soldiers)} out of {self.M} are alive. Game is lost :("
+        print("Inside game status function")
+        with lock:
+            if len(self.soldiers) >= 0.5 * self.M:
+                msg = f"{len(self.soldiers)} out of {self.M} are alive. Game is won !!!!"
+            else:
+                msg = f"{len(self.soldiers)} out of {self.M} are alive. Game is lost :("
 
-        game_end = True
+            game_end = True
 
-        # print(msg)
-        self.border_msg(msg)
+            # print(msg)
+            self.border_msg(msg)
 
-        return game_pb2.Response(message=msg)
+            return game_pb2.Response(message=msg)
 
     def initiaze(self, request, context):
         """
@@ -254,10 +255,13 @@ class Game(game_pb2_grpc.GameServicer):
          Returns:
              A game_pb2.ServerOutput object containing the soldier's unique ID and -1 if no client > N.
          """
-        if(self.soldierId==self.M ):
-            print(f"{self.M} Clients already connected. Cannot connect anymore clients")
-            return game_pb2.ServerOutput(message="-1")
+        
         with lock:
+            if(self.soldierId==self.M ):
+                print(f"{self.M} Clients already connected. Cannot connect anymore clients")
+                return game_pb2.ServerOutput(message="-1")
+
+
             self.soldierId += 1
             sol_id = self.soldierId
             sol = s1.Soldier(request.x, request.y, request.speed, self.soldierId)
@@ -289,7 +293,8 @@ class Game(game_pb2_grpc.GameServicer):
             Returns:
                 A game_pb2.Empty object.
             """
-        if self.iteration_over:
+        
+        if True:
         #def sendMissile(self, request, context):
 
         
@@ -391,8 +396,8 @@ class Game(game_pb2_grpc.GameServicer):
         #     soldierSet.append((soldier.x_cord, soldier.y_cord))
 
         # print(f"Alive soldiers coordinates on the battlefield: {soldierSet}")
-
-        obj_map = [(soldier.soldierID, soldier.x_cord, soldier.y_cord) for soldier in self.soldiers if soldier.alive]
+        with lock:
+            obj_map = [(soldier.soldierID, soldier.x_cord, soldier.y_cord) for soldier in self.soldiers if soldier.alive]
 
 
         print(f"Alive soldiers on the battlefield in current iteration {self.t}:")
@@ -474,6 +479,9 @@ class Game(game_pb2_grpc.GameServicer):
                 print(f"commander along with other soldiers died..cannot choose new commander")
             else:
                 print(f"Commander died. New commnder is soldier{self.commanderId}\n")
+        while True:
+            if self.iteration_over:
+                break
         return game_pb2.Commander_alive_response(commanderId=self.commanderId,time=self.t,all_dead=all_dead)
 
 

@@ -46,4 +46,4 @@ os.system('type nul > outputLogs/server.log')
 
 print("starting server.py..")
 
-os.system(f'python3 server.py {arg1} {arg2} {arg3} {arg4} > outputLogs/server.log')
+os.system(f'python server.py {arg1} {arg2} {arg3} {arg4} > outputLogs/server.log')
