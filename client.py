@@ -116,9 +116,9 @@ def commander_activities(obj, stub, T, ):
                     else:
                         print(f"Soldier {x} was not hit")
             
-            if t==T:
-                res = stub.game_status(game_pb2.Empty())
-                border_msg(res.message)
+                if t==T:
+                    res = stub.game_status(game_pb2.Empty())
+                    border_msg(res.message)
             
             time.sleep(10)
         exit()
