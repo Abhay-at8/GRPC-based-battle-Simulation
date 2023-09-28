@@ -161,39 +161,39 @@ class Game(game_pb2_grpc.GameServicer):
         """
         self.dead_in_iteration = ""
         print(f"\nCommander requested status of all soldier.\nWaiting for updates...\n\n")
-        with lock:
-            while True:
-                if self.update_cntr == len(self.soldiers):
-                    print(f"{self.soldier_msg_list}")
-                    self.soldier_msg_list = ""
-                    self.update_cntr = 0
-                    time.sleep(5)
-                    break
+        # with lock:
+        while True:
+            if self.update_cntr == len(self.soldiers):
+                print(f"{self.soldier_msg_list}")
+                self.soldier_msg_list = ""
+                self.update_cntr = 0
+                time.sleep(5)
+                break
 
-            msg = "\n"
-            # print(f"iterating soldiers in statusall {len(self.soldiers)}\n\n")
+        msg = "\n"
+        # print(f"iterating soldiers in statusall {len(self.soldiers)}\n\n")
 
-            time.sleep(1)
-            for soldier in self.soldiers:
-                # print(f"before: {soldier}\n")
-                msg += f"soldier Id : {soldier.soldierID}"
+        time.sleep(1)
+        for soldier in self.soldiers:
+            # print(f"before: {soldier}\n")
+            msg += f"soldier Id : {soldier.soldierID}"
 
-                if soldier.alive:
-                    msg += ", status : alive\n"
-                    # print(f"Alive {soldier.soldierID} from alive soldiers")
-                else:
-                    msg += ", status : dead\n"
-                    time.sleep(2)
-                    self.dead_soldiers.append(soldier.soldierID)
-                    self.dead_in_iteration += f"{soldier.soldierID} "
-                    # self.soldiers.remove(soldier)
-                    # time.sleep(4)
+            if soldier.alive:
+                msg += ", status : alive\n"
+                # print(f"Alive {soldier.soldierID} from alive soldiers")
+            else:
+                msg += ", status : dead\n"
+                time.sleep(2)
+                self.dead_soldiers.append(soldier.soldierID)
+                self.dead_in_iteration += f"{soldier.soldierID} "
+                # self.soldiers.remove(soldier)
+                # time.sleep(4)
 
-            for soldier in self.soldiers:
-                if not soldier.alive:
-                    self.soldiers.remove(soldier)
+        for soldier in self.soldiers:
+            if not soldier.alive:
+                self.soldiers.remove(soldier)
 
-                    # print(f"In staus_all: Status of soldiers is as follows\n{msg}\n")
+                # print(f"In staus_all: Status of soldiers is as follows\n{msg}\n")
         time.sleep(5)
         print(msg)
         return game_pb2.Response(message=msg)
@@ -304,15 +304,15 @@ class Game(game_pb2_grpc.GameServicer):
                     break
 
             time.sleep(5)
-            with lock:
-                x = random.randint(0, self.N - 1)
-                y = random.randint(0, self.N - 1)
-                s = random.randint(1, 4)
-                m = s1.Missile(x_cord=x, y_cord=y, rad=s)
-                self.missiles.append(m)
-                self.t += 1
-                outputStr = f"Missile Iteration {self.t}:\nWarning from commander: Missile {self.t} approaching {m}"
-                self.border_msg(outputStr)
+            #with lock:
+            x = random.randint(0, self.N - 1)
+            y = random.randint(0, self.N - 1)
+            s = random.randint(1, 4)
+            m = s1.Missile(x_cord=x, y_cord=y, rad=s)
+            self.missiles.append(m)
+            self.t += 1
+            outputStr = f"Missile Iteration {self.t}:\nWarning from commander: Missile {self.t} approaching {m}"
+            self.border_msg(outputStr)
             print("\n")
 
             if self.t == self.T:
@@ -357,15 +357,15 @@ class Game(game_pb2_grpc.GameServicer):
         """
         # print(f"attacking with missile\n")
         attack = 0
-        soldier_cnt = 0
+
         while not self.game_over:
             while len(self.missiles) > attack:
                 m = self.missiles[attack]
                 # print(f"attacking with missile {attack} : {m}")
-                yield game_pb2.Missile(x=m.x_cord, y=m.y_cord, rad=m.rad)
-                soldier_cnt += 1
-                time.sleep(5)
+                # time.sleep(5)
                 attack += 1
+                yield game_pb2.Missile(x=m.x_cord, y=m.y_cord, rad=m.rad)
+
         # print(f"missile attack over")
 
     def print_layout(self, request, context):
@@ -469,6 +469,7 @@ class Game(game_pb2_grpc.GameServicer):
                 self.commanderId = self.alive_soldiers[index]
             else:
                 all_dead = True
+                self.game_over = True
             # while not self.soldiers[index].alive:
             #     index = random.randint(0, len(self.soldiers) - 1)
             # self.commanderId=self.soldiers[index].soldierID
