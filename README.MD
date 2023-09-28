@@ -1,4 +1,4 @@
-<h1>Running the program<h1>
+<h1>Running the program</h1>
 
 1. Install the required dependencies:
 
