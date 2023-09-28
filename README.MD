@@ -1,4 +1,4 @@
-**Running the program**
+<h1>Running the program<h1>
 
 1. Install the required dependencies:
 
@@ -21,7 +21,7 @@ python run_server.py arg1 arg2 arg3 arg4
 
 ```bash
 ./run_client.bat arg2
-```bash
+```
 
 * **arg2:** No. of separate soldier clients
 
