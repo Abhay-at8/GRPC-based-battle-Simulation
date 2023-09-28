@@ -54,3 +54,49 @@ and then run
 python client.py arg2
 ```
 arg2 times in separate terminals. This will produce the server log in the terminal itself instead of output.log file.
+
+
+## Multiplayer Game in Python using gRPC-based Client-Server Architecture
+
+**Program Design**
+
+This multiplayer game is designed using a gRPC-based client-server architecture. Each client represents an individual soldier, and one of the soldiers is randomly chosen as the commander. The commander knows when the missile is approaching and sends this message to the server. The server then broadcasts this message to all the listening clients/soldiers using gRPC stream. All soldiers try to take shelter from the missile accordingly. The soldiers then send an update message to the game server with their new coordinates and status.
+
+If the current commander dies, a new commander from the alive soldiers list is randomly selected. This process is repeated for T iterations. If at least 50% of the soldiers are alive after T iterations, the game is won. Otherwise, the game is lost.
+
+**Hyperparameters**
+
+The following hyperparameters are provided at runtime in the server terminal:
+
+* **N:** Battlefield dimensions
+* **M:** Number of soldiers
+* **T:** Total time or number of iterations
+* **Smax:** Maximum speed of the soldiers
+
+**Commander**
+
+The commander has the following functions:
+
+* Sends a missile warning to the server after every t=1 unit-time.
+* Prints the status of all soldiers.
+* Send a wasHit() call to check status of a particular soldier
+* Prints the battlefield layout.
+* Prints the game status (won/lost) at the end of the game.
+
+**Soldier**
+
+A soldier has the following functions:
+
+* Listens for missile approach warnings from the game server.
+* When a missile approach warning is received, the soldier takes shelter from the missile.
+* The soldier then sends an update message to the game server with its new coordinates and status.
+
+**Server**
+
+The server has the following functions:
+
+* Provides methods for soldiers to register
+* Updates their coordinates
+* Receives missile coordinates.
+* Maintains a list of all soldiers and missiles
+* Updates the battlefield layout based on the soldiers' coordinates and the missile's trajectory
