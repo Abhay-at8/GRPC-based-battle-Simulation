@@ -2,15 +2,15 @@
 
 1. Install the required dependencies:
 
-"
-pip install -r requirement.txt
-"
+```bash
+pip install -r requirements.txt
+```
 
 2. Start the server:
 
-"
+```bash
 python run_server.py arg1 arg2 arg3 arg4
-"
+```
 
 * **arg1:** Battlefield dimensions (N)
 * **arg2:** No of soldiers (M)
@@ -19,9 +19,9 @@ python run_server.py arg1 arg2 arg3 arg4
 
 3. Start the clients:
 
-"
+```bash
 ./run_client.bat arg2
-"
+```bash
 
 * **arg2:** No. of separate soldier clients
 
