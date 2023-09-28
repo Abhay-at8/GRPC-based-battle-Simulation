@@ -1,67 +1,87 @@
 syntax = "proto3";
 
 service Game {
-
+   // Registers a new soldier with the server.
    rpc register (Soldier) returns (ServerOutput) {}
+
+   // Returns a stream of missiles that are approaching the client.
    rpc missile_approach (Empty) returns (stream Missile) {}
+
+   // Tells the status of the game, including the positions of all soldiers and missiles.
    rpc status(Request) returns (Empty){}
+
+   // Tells the server to send a missile from the commander.
    rpc sendMissile(Empty) returns (Empty);
+
+   // Updates the server with the client's soldier's new coordinates.
    rpc update_cordinates(Update) returns (Empty);
+
+   // Returns the status of the game, including the positions of all soldiers and missiles, for all clients.
    rpc status_all(Empty) returns(Response);
+
+   // Prints the layout of the game to the console.
    rpc print_layout(Empty) returns(Response);
+
+   // Returns the initial values for the game, such as the number of soldiers, missiles, and T.
    rpc initiaze(Empty) returns(InitialValues);
+
+   // Returns the status of the game, including the positions of all soldiers and missiles, for the current client.
    rpc game_status(Empty) returns(Response);
+
+   // Checks if the commander is alive.
    rpc is_commander_alive(Empty) returns(Commander_alive_response);
+
+   // Tells the server that a soldier has been hit.
    rpc was_hit(wasHit) returns(wasHit);
 }
 message Empty {}
 
 message wasHit{
-   int32 soldierID=1;
-   bool trueFlag=2;
+   int32 soldierID=1;      // The ID of the soldier that was hit.
+   bool trueFlag=2;        // The ID of the soldier that was hit.
 }
 
 message Soldier {
-   int32  x = 1;
-   int32  y = 2;
-   int32 speed=3;
+   int32  x = 1;           // The soldier's x-coordinate
+   int32  y = 2;           // The soldier's x-coordinate
+   int32 speed=3;          // The soldier's speed.
 }
 message InitialValues{
-   int32 commander_id=1;
-   int32 N=2;
-   int32 M=3;
-   int32 T=4;
-   int32 S=5;
+   int32 commander_id=1;    // The ID of the commander.
+   int32 N=2;               // The size of the battlefield matrix
+   int32 M=3;               // The number of soldiers.
+   int32 T=4;               // The number of iterations.
+   int32 S=5;               // Max speed of soldiers
 
 }
 message Update{
-   bool alive=1;
-   int32 x=2;
-   int32 y=3;
-   string message=4;
-   int32 soldierID=5;
+   bool alive=1;           // Whether the soldier is alive.
+   int32 x=2;              // The soldier's x-coordinate.
+   int32 y=3;              // The soldier's y-coordinate.
+   string message=4;       // A message from the soldier.
+   int32 soldierID=5;      // The soldier's ID.
 }
 
 message Missile {
-   int32  x = 1;
-   int32  y = 2;
-   int32 rad=3;
+   int32  x = 1;           // The missile's x-coordinate.
+   int32  y = 2;           // The missile's x-coordinate.
+   int32 rad=3;            // The missile's x-coordinate.
 }
 message ServerOutput {
-   string message = 1;
+   string message = 1;     // A message from the server.
 }
 
 message Request {
-  string message = 1;
+  string message = 1;      // A message from the server.
 }
 
 message Response {
-  string message = 1;
+  string message = 1;       // A message from the server.
 }
 
 message Commander_alive_response {
-   int32 commanderId = 1;
-   int32 time=2;
-   bool all_dead=3;
+   int32 commanderId = 1;     // The ID of the commander.
+   int32 time=2;              // The time at which the commander was last alive.
+   bool all_dead=3;           // A flag indicating whether all of the commanders are dead.
 }
 

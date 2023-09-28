@@ -10,8 +10,8 @@ Running the program
 ********************
 
 Please also check the note below.
-
-1. Start the server
+1. pip install -r requirement.txt
+2. Start the server
 	• python run_server.py arg1 arg2 arg3 arg4
 	• it starts the server.py and logs its output in outputLogs/server.log file.
 	• Arguments are the hyperparameters:
@@ -20,21 +20,21 @@ Please also check the note below.
 		o arg3: Total time or no of iterations (T)
 		o arg4: max speed of soldiers (Smax)
 
-2. Start the clients
+3. Start the clients
 	• ./run_client.bat arg2
 	• Run run_client.bat which starts n separate clients
 	• arg2 is the no. of separate soldier clients 
 
-3. Wait for the execution of the program to complete
+4. Wait for the execution of the program to complete
 	• Multiple command line windows will open each executing a separate soldier client.
 	• Descriptive messages are printed for each soldier
 	• Commander in addition also prints the battlefield layout after each iteration.
 	• After a game is finished [see the output message in the commander window], all terminal windows will close automatically otherwise close them manually.
 	• Press CTRL + C in the server terminal to close it.
 	• If it doesn’t close, use the task manager to close the specific terminal process.
-	• Server output log will be saved in outputLogs/server.log file
+	• Server output log will be saved in outputLogs/server.log file. Make sure server is closed otherwise server.log won’t be saved.
 
-4. Open the server.log file to see the descriptive output log messages that allows us to understand what happened in the war zone.
+5. Open the server.log file to see the descriptive output log messages that allows us to understand what happened in the war zone.
 
 *****
 Note:

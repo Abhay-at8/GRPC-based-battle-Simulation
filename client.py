@@ -7,15 +7,12 @@ import game_pb2_grpc
 import time
 from threading import Thread
 
-# Global variable to track the current time step.
-
-
 
 def run():
     global t
     global commander_id
     global N
-    t=0
+    t = 0
 
     """Starts a new game session for the soldier.
 
@@ -33,7 +30,7 @@ def run():
     M = 3
     T = 5
 
-    #channel = grpc.insecure_channel("192.168.181.3:50051")
+    # channel = grpc.insecure_channel("192.168.181.3:50051")
     channel = grpc.insecure_channel("localhost:50051")
     # create a stub for the service
     stub = game_pb2_grpc.GameStub(channel)
@@ -49,7 +46,7 @@ def run():
     y = random.randint(0, N - 1)
     s = random.randint(1, S)
     response = stub.register(game_pb2.Soldier(x=x, y=y, speed=s))
-    if response.message=='-1':
+    if response.message == '-1':
         print(f"{M} Clients already connected. Cannot connect anymore clients")
         exit(1)
 
@@ -58,7 +55,7 @@ def run():
 
     border_msg(obj.__str__())
 
-    commander_thread = Thread(target=commander_activities, args=[obj, stub, T ])
+    commander_thread = Thread(target=commander_activities, args=[obj, stub, T])
     soldier_thread = Thread(target=soldier_action, args=[obj, stub, T, N])
 
     commander_thread.start()
@@ -86,13 +83,13 @@ def commander_activities(obj, stub, T, ):
     """
 
     try:
-        global t 
+        global t
         global commander_id
-        while t<T and obj.alive:
-            
+        while t < T and obj.alive:
+
             if obj.soldierID == commander_id and obj.alive:
                 print("Commnader is {}".format(commander_id))
-                while t < T  and obj.alive:
+                while t < T and obj.alive:
                     print(f"sending missile {t} warning from commander\n\n")
                     res = stub.sendMissile(game_pb2.Empty())
                     t = t + 1
@@ -103,23 +100,23 @@ def commander_activities(obj, stub, T, ):
                     res = stub.print_layout(game_pb2.Empty())
                     print(res.message)
                     print('\n')
-                    
+
                     print("--------------------------------------")
-                #print("Game ends here")
+                # print("Game ends here")
 
                 if obj.alive:
-                    x=random.randint(0, N - 1)
-                    #was_hit_flag=False
-                    res=stub.was_hit(game_pb2.wasHit(soldierID=x,trueFlag=False))
+                    x = random.randint(0, N - 1)
+                    # was_hit_flag=False
+                    res = stub.was_hit(game_pb2.wasHit(soldierID=x, trueFlag=False))
                     if res.trueFlag:
                         print(f"Soldier {x} was hit")
                     else:
                         print(f"Soldier {x} was not hit")
-            
-                if t==T:
+
+                if t == T:
                     res = stub.game_status(game_pb2.Empty())
                     border_msg(res.message)
-            
+
             time.sleep(10)
         exit()
 
@@ -159,9 +156,9 @@ def soldier_action(obj, stub, T, N):
                 game_pb2.Update(alive=obj.alive, x=obj.x_cord, y=obj.y_cord, message=msg,
                                 soldierID=obj.soldierID))
 
-            res = stub.is_commander_alive(game_pb2.Empty())  
+            res = stub.is_commander_alive(game_pb2.Empty())
             if res.all_dead:
-                t=T
+                t = T
                 print("All dead")
                 break
 
@@ -169,20 +166,20 @@ def soldier_action(obj, stub, T, N):
                 time.sleep(15)
                 commander_id = res.commanderId
                 print(f"commander dead : before t")
-                t=res.time
-                var=res.all_dead
+                t = res.time
+                var = res.all_dead
                 print(f"After t {t}")
                 print("I am new Commander")
                 time.sleep(2)
             if not obj.alive:
                 break
-                
+
 
         else:
             break
     print("out of Stream")
     if obj.alive:
-        t=T
+        t = T
 
 
 def border_msg(msg):
