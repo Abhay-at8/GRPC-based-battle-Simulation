@@ -46,8 +46,11 @@ To run the server on a Linux VM system and the clients on Windows system:
 3. Also, in server.py, in the last line, change python to python3 based on your system.
 4. If needed, server and clients can be run without the scripts. Run:
 
-"
+```bash
 python server.py arg1 arg2 arg3 arg4
-"
-
-and then run "python client.py arg2", arg2 times in separate terminals. This will produce the server log in the terminal itself instead of output.log file.
+```
+and then run 
+```bash
+python client.py arg2
+```
+arg2 times in separate terminals. This will produce the server log in the terminal itself instead of output.log file.
