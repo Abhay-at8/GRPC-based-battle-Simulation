@@ -1,5 +1,5 @@
-## Multiplayer Game in Python using gRPC-based Client-Server Architecture
-<h2>Running the program</h2>
+# Multiplayer Game in Python using gRPC-based Client-Server Architecture
+## Running the program
 
 1. Install the required dependencies:
 
@@ -57,7 +57,7 @@ python client.py arg2
 arg2 times in separate terminals. This will produce the server log in the terminal itself instead of output.log file.
 
 
-**Program Design**
+## Program Design
 
 This multiplayer game is designed using a gRPC-based client-server architecture. Each client represents an individual soldier, and one of the soldiers is randomly chosen as the commander. The commander knows when the missile is approaching and sends this message to the server. The server then broadcasts this message to all the listening clients/soldiers using gRPC stream. All soldiers try to take shelter from the missile accordingly. The soldiers then send an update message to the game server with their new coordinates and status.
 
@@ -100,11 +100,12 @@ The server has the following functions:
 * Maintains a list of all soldiers and missiles
 * Updates the battlefield layout based on the soldiers' coordinates and the missile's trajectory
 
-**Simplified Diagrammatic View of the Program Architecture**
+## Simplified Diagrammatic View of the Program Architecture
+
 
 ![gRPC Program Simplified Architecture Diagram](image/gRPCDiagram.png?raw=true "gRPC Program Simplified Architecture Diagram")
 
-##Program Flow
+## Program Flow 
 Pseudo code to understand the program flow.
 
 ```
@@ -131,7 +132,7 @@ else:
   game is lost
 ```
 
-**Design Tradeoffs**
+## Design Tradeoffs
 
 *  The commander broadcasts the missile warning to all soldiers through the server, the commander sends the missile approaching signal to the server and the server passes the message to the listening soldiers via a stream.
 *  Regarding the hyperparameters t and T, we are only taking T as an argument and assuming t = 1.
@@ -139,14 +140,11 @@ else:
     + But when T = 6 and t = 2 (say), we have 3 missile iterations with each iteration being 2 unit-time long.
     + So logically and functionally both implementations are the same, but we are choosing to implement with t = 1 for simplicity.
     + For t = n ≤ T, the only difference is that total no of iteration is T/t in this case but for our implementation it's just T.
-*  •	Regarding hyperparameter Si, instead of defining each soldier’s speed as a command line argument, for simplicity we are taking Smax as the maximum soldier speed and each soldier i is assigned speed Si in range [0, Smax] randomly during execution.
+*  Regarding hyperparameter Si, instead of defining each soldier’s speed as a command line argument, for simplicity we are taking Smax as the maximum soldier speed and each soldier i is assigned speed Si in range [0, Smax] randomly during execution.
 
 Overall, the design tradeoffs that we have made are aimed at simplifying the code and making it easier to understand. We have also introduced some randomness into the game to make it more unpredictable.
 
-**Issues**
+## Issues
 
 * Random issues might occur during execution of the program due to deadlock or synchronization issues. Please close the program and try again.
 * If two soldiers get the same random coordinates, only one soldier is shown in the battlefield matrix. But both soldier’s coordinates are printed in the alive soldiers list.
-
-
-
