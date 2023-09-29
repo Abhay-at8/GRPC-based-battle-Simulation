@@ -3,13 +3,13 @@
 
 1. Install the required dependencies:
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
 2. Start the server:
 
-```bash
+```
 python run_server.py arg1 arg2 arg3 arg4
 ```
 
@@ -20,7 +20,7 @@ python run_server.py arg1 arg2 arg3 arg4
 
 3. Start the clients:
 
-```bash
+```
 ./run_client.bat arg2
 ```
 
@@ -47,11 +47,11 @@ To run the server on a Linux VM system and the clients on Windows system:
 3. Also, in server.py, in the last line, change python to python3 based on your system.
 4. If needed, server and clients can be run without the scripts. Run:
 
-```bash
+```
 python server.py arg1 arg2 arg3 arg4
 ```
 and then run 
-```bash
+```
 python client.py arg2
 ```
 arg2 times in separate terminals. This will produce the server log in the terminal itself instead of output.log file.
@@ -101,5 +101,52 @@ The server has the following functions:
 * Updates the battlefield layout based on the soldiers' coordinates and the missile's trajectory
 
 **Simplified Diagrammatic View of the Program Architecture**
+
 ![gRPC Program Simplified Architecture Diagram](image/gRPCDiagram.png?raw=true "gRPC Program Simplified Architecture Diagram")
+
+##Program Flow
+Pseudo code to understand the program flow.
+
+```
+start the server
+initialize N soldiers each as a client
+choose a random commander from among N soldiers
+
+while (time < total_time):
+  launch a missile attack
+  commander broadcasts that a missile is approaching
+  soldiers take shelter
+  check if any soldier was hit
+  get the status of all soldiers
+  print the layout of the battlefield
+
+if (current_commander is dead):
+      choose a new random commander
+
+increment time
+
+if (number of alive soldiers / total_time >= 0.5):
+  game is won
+else:
+  game is lost
+```
+
+**Design Tradeoffs**
+
+*  The commander broadcasts the missile warning to all soldiers through the server, the commander sends the missile approaching signal to the server and the server passes the message to the listening soldiers via a stream.
+*  Regarding the hyperparameters t and T, we are only taking T as an argument and assuming t = 1.
+    + E.g., when T= 6 and t = 1, we have 6 missile iterations with each iteration being 1 unit-time long.
+    + But when T = 6 and t = 2 (say), we have 3 missile iterations with each iteration being 2 unit-time long.
+    + So logically and functionally both implementations are the same, but we are choosing to implement with t = 1 for simplicity.
+    + For t = n ≤ T, the only difference is that total no of iteration is T/t in this case but for our implementation it's just T.
+*  •	Regarding hyperparameter Si, instead of defining each soldier’s speed as a command line argument, for simplicity we are taking Smax as the maximum soldier speed and each soldier i is assigned speed Si in range [0, Smax] randomly during execution.
+
+Overall, the design tradeoffs that we have made are aimed at simplifying the code and making it easier to understand. We have also introduced some randomness into the game to make it more unpredictable.
+
+**Issues**
+
+* Random issues might occur during execution of the program due to deadlock or synchronization issues. Please close the program and try again.
+* If two soldiers get the same random coordinates, only one soldier is shown in the battlefield matrix. But both soldier’s coordinates are printed in the alive soldiers list.
+
+
 
