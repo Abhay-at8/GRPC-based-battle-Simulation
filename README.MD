@@ -59,9 +59,7 @@ arg2 times in separate terminals. This will produce the server log in the termin
 
 ## Program Design
 
-<div style='text-align: justify;'>
 This multiplayer game is designed using a gRPC-based client-server architecture. Each client represents an individual soldier, and one of the soldiers is randomly chosen as the commander. The commander knows when the missile is approaching and sends this message to the server. The server then broadcasts this message to all the listening clients/soldiers using gRPC stream. All soldiers try to take shelter from the missile accordingly. The soldiers then send an update message to the game server with their new coordinates and status.
-</div>
 
 If the current commander dies, a new commander from the alive soldiers list is randomly selected. This process is repeated for T iterations. If at least 50% of the soldiers are alive after T iterations, the game is won. Otherwise, the game is lost.
 
@@ -135,7 +133,6 @@ else:
 ```
 
 ## Design Tradeoffs
-<div style='text-align: justify;'>
 *  The commander broadcasts the missile warning to all soldiers through the server, the commander sends the missile approaching signal to the server and the server passes the message to the listening soldiers via a stream.
 *  Regarding the hyperparameters t and T, we are only taking T as an argument and assuming t = 1.
     + E.g., when T= 6 and t = 1, we have 6 missile iterations with each iteration being 1 unit-time long.
@@ -145,10 +142,7 @@ else:
 *  Regarding hyperparameter Si, instead of defining each soldier’s speed as a command line argument, for simplicity we are taking Smax as the maximum soldier speed and each soldier i is assigned speed Si in range [0, Smax] randomly during execution.
 
 Overall, the design tradeoffs that we have made are aimed at simplifying the code and making it easier to understand. We have also introduced some randomness into the game to make it more unpredictable.
-</div>
 
 ## Issues
-<div style='text-align: justify;'>
 * Random issues might occur during execution of the program due to deadlock or synchronization issues. Please close the program and try again.
 * If two soldiers get the same random coordinates, only one soldier is shown in the battlefield matrix. But both soldier’s coordinates are printed in the alive soldiers list.
-</div>
