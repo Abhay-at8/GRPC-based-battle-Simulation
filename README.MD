@@ -1,4 +1,5 @@
-<h1>Running the program</h1>
+## Multiplayer Game in Python using gRPC-based Client-Server Architecture
+<h2>Running the program</h2>
 
 1. Install the required dependencies:
 
@@ -56,8 +57,6 @@ python client.py arg2
 arg2 times in separate terminals. This will produce the server log in the terminal itself instead of output.log file.
 
 
-## Multiplayer Game in Python using gRPC-based Client-Server Architecture
-
 **Program Design**
 
 This multiplayer game is designed using a gRPC-based client-server architecture. Each client represents an individual soldier, and one of the soldiers is randomly chosen as the commander. The commander knows when the missile is approaching and sends this message to the server. The server then broadcasts this message to all the listening clients/soldiers using gRPC stream. All soldiers try to take shelter from the missile accordingly. The soldiers then send an update message to the game server with their new coordinates and status.
@@ -71,7 +70,7 @@ The following hyperparameters are provided at runtime in the server terminal:
 * **N:** Battlefield dimensions
 * **M:** Number of soldiers
 * **T:** Total time or number of iterations
-* **Smax:** Maximum speed of the soldiers
+* **S<sub>max</sub>:** Maximum speed of the soldiers
 
 **Commander**
 
@@ -100,3 +99,7 @@ The server has the following functions:
 * Receives missile coordinates.
 * Maintains a list of all soldiers and missiles
 * Updates the battlefield layout based on the soldiers' coordinates and the missile's trajectory
+
+**Simplified Diagrammatic View of the Program Architecture**
+![gRPC Program Simplified Architecture Diagram](image/gRPCDiagram.png?raw=true "gRPC Program Simplified Architecture Diagram")
+
